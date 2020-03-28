@@ -212,7 +212,7 @@ public class Hospital {
 
             // Creating the prepared statements
             String deleteHospital = "delete from hospital where hospitalID=?";
-            String deleteHospitalPhone = "delete from hospital where hospitalID=?";
+            String deleteHospitalPhone = "delete from hospitalphone where hospitalID=?";
 
             PreparedStatement preparedStmtForHospital = con.prepareStatement(deleteHospital);
             PreparedStatement preparedStmtForHospitalPhone = con.prepareStatement(deleteHospitalPhone);
