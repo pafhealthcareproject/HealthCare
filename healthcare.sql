@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Mar 28, 2020 at 10:46 AM
+-- Generation Time: Mar 29, 2020 at 02:51 AM
 -- Server version: 8.0.18
 -- PHP Version: 7.4.0
 
@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `age` int(200) NOT NULL,
   `gender` varchar(200) NOT NULL,
   `email` varchar(200) NOT NULL,
+  `address` varchar(200) NOT NULL,
   `username` varchar(200) NOT NULL,
   `password` varchar(200) NOT NULL,
   PRIMARY KEY (`userID`)
