@@ -91,6 +91,9 @@ public class Hospital {
 
             }
 
+            // Preparing the HTML table to be displayed
+            output = "<table border=\"1\"><tr><th>Item Code</th><th>Hospital ID</th><th>Hospital Name</th><th>Hospital Address</th><th>Hospital Phone</th><th>Hospital Username</th><th>Hospital Password</th><th>Update</th><th>Remove</th></tr>";
+
             String hospitalQuery = "select * from hospital";
             String hospitalPhoneQuery = "select * from hospitalphone";
 

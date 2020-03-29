@@ -3,6 +3,9 @@ package com.paf;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import com.google.gson.*;
+import org.jsoup.*;
+import org.jsoup.parser.*;
+import org.jsoup.nodes.*;
 
 import model.Hospital;
 
