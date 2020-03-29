@@ -82,7 +82,9 @@ public class Hospital {
         String output = "";
 
         try {
+
             Connection con = connect();
+
             if (con == null) {
 
                 return "Database connection error occurred while reading the hospital details.";
