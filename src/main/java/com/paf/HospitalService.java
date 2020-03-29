@@ -6,7 +6,7 @@ import com.google.gson.*;
 
 import model.Hospital;
 
-@Path("/hospitals")
+@Path("/Hospitals")
 public class HospitalService {
 
     Hospital hospitalObj = new Hospital();
