@@ -7,14 +7,14 @@ import model.User;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@Path("/users")
+@Path("/Users")
 public class UserService {
 
     User userObj = new User();
 
     @GET
     @Path("/")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_HTML)
     public String readUser() {
 
         return userObj.readUser();
