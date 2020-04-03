@@ -3,6 +3,9 @@ package com.paf;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import com.google.gson.*;
+import org.jsoup.*;
+import org.jsoup.parser.*;
+import org.jsoup.nodes.*;
 
 import model.Hospital;
 
@@ -13,7 +16,7 @@ public class HospitalService {
 
     @GET
     @Path("/")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_HTML)
     public String readHospital() {
 
         return hospitalObj.readHospital();

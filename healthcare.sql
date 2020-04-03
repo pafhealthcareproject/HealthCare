@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Mar 29, 2020 at 02:51 AM
+-- Generation Time: Apr 03, 2020 at 08:35 AM
 -- Server version: 8.0.18
 -- PHP Version: 7.4.0
 
@@ -21,6 +21,20 @@ SET time_zone = "+00:00";
 --
 -- Database: `healthcare`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE IF NOT EXISTS `admin` (
+  `adminID` int(200) NOT NULL AUTO_INCREMENT,
+  `username` varchar(200) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  PRIMARY KEY (`adminID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -51,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `doctor` (
   `specialization` varchar(200) NOT NULL,
   `doctorUsername` varchar(200) NOT NULL,
   `doctorPassword` varchar(200) NOT NULL,
+  `adminID` int(200) NOT NULL,
   PRIMARY KEY (`doctorID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -67,8 +82,17 @@ CREATE TABLE IF NOT EXISTS `hospital` (
   `hospitalAddress` varchar(200) NOT NULL,
   `hospitalUsername` varchar(200) NOT NULL,
   `hospitalPassword` varchar(200) NOT NULL,
+  `adminID` int(200) NOT NULL,
   PRIMARY KEY (`hospitalID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `hospital`
+--
+
+INSERT INTO `hospital` (`hospitalID`, `hospitalName`, `hospitalAddress`, `hospitalUsername`, `hospitalPassword`, `adminID`) VALUES
+(1, 'Nawaloka', 'Nawaloka Hospital, Malabe', 'navalokamlb', 'malabe123', 0),
+(2, 'gh', 'thht', 'hth', 'thh', 0);
 
 -- --------------------------------------------------------
 
@@ -78,9 +102,18 @@ CREATE TABLE IF NOT EXISTS `hospital` (
 
 DROP TABLE IF EXISTS `hospitalphone`;
 CREATE TABLE IF NOT EXISTS `hospitalphone` (
-  `hospitalID` varchar(200) NOT NULL,
-  `hospitalPhone` varchar(200) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `hospitalID` int(200) NOT NULL AUTO_INCREMENT,
+  `hospitalPhone` varchar(200) NOT NULL,
+  PRIMARY KEY (`hospitalID`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `hospitalphone`
+--
+
+INSERT INTO `hospitalphone` (`hospitalID`, `hospitalPhone`) VALUES
+(1, '0111020452'),
+(2, '5635');
 
 -- --------------------------------------------------------
 
