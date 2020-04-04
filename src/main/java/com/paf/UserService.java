@@ -14,7 +14,7 @@ public class UserService {
 
     @GET
     @Path("/")
-    @Produces(MediaType.TEXT_HTML)
+    @Produces(MediaType.APPLICATION_JSON)
     public String readUser() {
 
         return userObj.readUser();
