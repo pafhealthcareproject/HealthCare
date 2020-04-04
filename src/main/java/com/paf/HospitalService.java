@@ -16,7 +16,7 @@ public class HospitalService {
 
     @GET
     @Path("/")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String readHospital() {
 
         return hospitalObj.readHospital();
