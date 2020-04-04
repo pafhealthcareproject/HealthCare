@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Apr 03, 2020 at 08:35 AM
--- Server version: 8.0.18
--- PHP Version: 7.4.0
+-- Generation Time: Apr 04, 2020 at 06:34 PM
+-- Server version: 5.7.26
+-- PHP Version: 7.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -163,7 +163,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(200) NOT NULL,
   `password` varchar(200) NOT NULL,
   PRIMARY KEY (`userID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`userID`, `firstName`, `lastName`, `age`, `gender`, `email`, `address`, `username`, `password`) VALUES
+(1, 'pasan', 'perera', 18, 'Male', 'pasan@gmail.com', 'kurunegala Maspotha', 'pasan', 'Th333');
 
 -- --------------------------------------------------------
 
@@ -173,9 +180,17 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 DROP TABLE IF EXISTS `userphone`;
 CREATE TABLE IF NOT EXISTS `userphone` (
-  `userID` varchar(200) NOT NULL,
-  `userPhone` varchar(200) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `userID` int(200) NOT NULL AUTO_INCREMENT,
+  `userPhone` varchar(200) NOT NULL,
+  PRIMARY KEY (`userID`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `userphone`
+--
+
+INSERT INTO `userphone` (`userID`, `userPhone`) VALUES
+(1, '0770060608');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
