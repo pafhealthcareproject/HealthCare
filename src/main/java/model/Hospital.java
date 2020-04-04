@@ -111,6 +111,7 @@ public class Hospital {
                 hospitalDetails.addProperty("hospitalID", hospitalID);
                 hospitalDetails.addProperty("hospitalName", hospitalName);
                 hospitalDetails.addProperty("hospitalAddress", hospitalAddress);
+                hospitalDetails.addProperty("hospitalPhone", hospitalPhone);
                 hospitalDetails.addProperty("hospitalUsername", hospitalUsername);
                 hospitalDetails.addProperty("hospitalPassword", hospitalPassword);
 
