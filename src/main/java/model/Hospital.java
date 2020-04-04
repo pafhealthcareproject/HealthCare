@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.JsonObject;
+
 import java.sql.*;
 
 public class Hospital {
@@ -104,13 +106,15 @@ public class Hospital {
                 String hospitalPassword = rs.getString("hospitalPassword");
                 String hospitalPhone = rs.getString("hospitalPhone");
 
-                // Adding into the HTML table
-                output += "<tr><td class=\"v-align-middle\"><p>" + hospitalID + "</p></td>";
-                output += "<td class=\"v-align-middle\"><p>" + hospitalName + "</p></td>";
-                output += "<td class=\"v-align-middle\"><p>" + hospitalAddress + "</p></td>";
-                output += "<td class=\"v-align-middle\"><p>" + hospitalPhone + "</p></td>";
-                output += "<td class=\"v-align-middle\"><p>" + hospitalUsername + "</p></td>";
-                output += "<td class=\"v-align-middle\"><p>" + hospitalPassword + "</p></td>";
+                JsonObject hospitalDetails = new JsonObject();
+
+                hospitalDetails.addProperty("hospitalID", hospitalID);
+                hospitalDetails.addProperty("hospitalName", hospitalName);
+                hospitalDetails.addProperty("hospitalAddress", hospitalAddress);
+                hospitalDetails.addProperty("hospitalUsername", hospitalUsername);
+                hospitalDetails.addProperty("hospitalPassword", hospitalPassword);
+
+                output = hospitalDetails.toString();
 
             }
 
