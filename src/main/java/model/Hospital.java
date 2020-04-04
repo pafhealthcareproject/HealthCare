@@ -1,7 +1,8 @@
 package model;
 
+import com.google.gson.JsonObject;
+
 import java.sql.*;
-import com.google.gson.*;
 
 public class Hospital {
 
@@ -91,10 +92,6 @@ public class Hospital {
 
             }
 
-            // Preparing the HTML table to be displayed
-            output = "<link href=\"https://fonts.googleapis.com/css?family=Roboto&display=swap\" rel=\"stylesheet\"> <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css\" integrity=\"sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh\" crossorigin=\"anonymous\"> <style>body { font-family: 'Roboto', sans-serif !important; background-color:#F5F5F5; }</style>" + "<br><h3 align=center>HealthCare System</h3><br><div class=\"container\">\n" + "<div class=\"row\">\n" + "<div class=\"col-sm-14\"><div class=\"card\">\n" +
-                    "  <div class=\"card-body\"><h4>Hospital Management</h4><hr><table class=\"table table-bordered\" align=\"center\"><thead class=\"thead-dark\"><tr align=center><th>Hospital ID</th><th>Hospital Name</th><th>Hospital Address</th></th><th>Hospital Phone</th><th>Hospital Username</th></th><th>Hospital Password</th><th>Update</th><th>Remove</th></tr></thread>";
-
             String query = "select h.hospitalID, h.hospitalName, h.hospitalAddress, h.hospitalUsername, h.hospitalPassword, p.hospitalPhone\n" + "from hospital h, hospitalphone p\n" + "where h.hospitalID=p.hospitalID;";
 
             Statement stmt = con.createStatement();
@@ -109,16 +106,15 @@ public class Hospital {
                 String hospitalPassword = rs.getString("hospitalPassword");
                 String hospitalPhone = rs.getString("hospitalPhone");
 
-                // Adding into the HTML table
-                output += "<tr align=center><td class=\"align-middle\">" + hospitalID + "</td>";
-                output += "<td class=\"align-middle\">" + hospitalName + "</td>";
-                output += "<td class=\"align-middle\">" + hospitalAddress + "</td>";
-                output += "<td class=\"align-middle\">" + hospitalPhone + "</td>";
-                output += "<td class=\"align-middle\">" + hospitalUsername + "</td>";
-                output += "<td class=\"align-middle\">" + hospitalPassword + "</td>";
+                JsonObject hospitalDetails = new JsonObject();
 
-                // Buttons
-                output += "<td><input name=\"btnUpdate\" type=\"button\" value=\"Update\" class=\"btn btn-secondary\"></td>" + "<td><form method=\"post\" action=\"Hospitals.jsp\">" + "<input name=\"btnRemove\" type=\"submit\" value=\"Remove\" class=\"btn btn-danger\">" + "<input name=\"itemID\" type=\"hidden\" value=\"" + hospitalID + "\">" + "</form></td></tr></div></div></div></div></div>";
+                hospitalDetails.addProperty("hospitalID", hospitalID);
+                hospitalDetails.addProperty("hospitalName", hospitalName);
+                hospitalDetails.addProperty("hospitalAddress", hospitalAddress);
+                hospitalDetails.addProperty("hospitalUsername", hospitalUsername);
+                hospitalDetails.addProperty("hospitalPassword", hospitalPassword);
+
+                output = hospitalDetails.toString();
 
             }
 
