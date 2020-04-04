@@ -87,21 +87,19 @@ public class User {
         String output = "";
 
         try {
+
             Connection con = connect();
+
             if (con == null) {
 
                 return "Database connection error occurred while reading the user details.";
 
             }
 
-            String userQuery = "select * from user";
-            String userPhoneQuery = "select * from userphone";
+            String Query = "select u.userID, u.firstName, u.lastName, u.age, u.gender, u.email, u.address,u.username,u.password,p.userPhone from user u,userphone p where u.userID=p.userID";
 
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(userQuery);
-
-            Statement stmtPhone = con.createStatement();
-            ResultSet rsPhone = stmtPhone.executeQuery(userPhoneQuery);
+            ResultSet rs = stmt.executeQuery(Query);
 
             while (rs.next()) {
 
@@ -112,6 +110,7 @@ public class User {
                 String gender = rs.getString("gender");
                 String email = rs.getString("email");
                 String address = rs.getString("address");
+                String userPhone = rs.getString("userPhone");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
 
@@ -124,24 +123,11 @@ public class User {
                 userDetails.addProperty("gender", gender);
                 userDetails.addProperty("email", email);
                 userDetails.addProperty("address", address);
+                userDetails.addProperty("userPhone", userPhone);
                 userDetails.addProperty("username", username);
                 userDetails.addProperty("password", password);
 
                 output = userDetails.toString();
-
-            }
-
-            while (rsPhone.next()) {
-
-                String userID = Integer.toString(rs.getInt("userID"));
-                String userPhone = rs.getString("userPhone");
-
-                JsonObject userPhoneDetails = new JsonObject();
-
-                userPhoneDetails.addProperty("userID", userID);
-                userPhoneDetails.addProperty("userPhone", userPhone);
-
-                output = userPhoneDetails.toString();
 
             }
 
