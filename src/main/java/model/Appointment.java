@@ -90,7 +90,7 @@ public class Appointment {
 
             }
 
-            String query = "select a.userID, a.doctorID, a.appointmentDate, a.appointmentTime\n" + "from appointment a\n" ;
+            String query = "select appointmentID, userID, doctorID, appointmentDate, appointmentTime\n" + "from appointment a\n" ;
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -206,7 +206,7 @@ public class Appointment {
 
             // Executing the statements
             preparedStmtForAppointment.execute();
-            preparedStmtForAppointment.execute();
+
 
             con.close();
 
