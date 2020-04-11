@@ -47,12 +47,17 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `appointmentID` int(200) NOT NULL AUTO_INCREMENT,
   `userID` varchar(200) NOT NULL,
   `doctorID` varchar(200) NOT NULL,
-  `appointmentDate` date NOT NULL,
-  `appointmentTime` time(6) NOT NULL,
+  `appointmentDate` DATE NOT NULL,
+  `appointmentTime` TIME(6) NOT NULL,
   PRIMARY KEY (`appointmentID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`appointmentID`, `userID`, `doctorID`, `appointmentDate`, `appointmentDate`) VALUES
+(1, '2', '2', '2019-04-05', '3:40' );
 
 --
 -- Table structure for table `doctor`
