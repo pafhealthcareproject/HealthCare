@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Apr 11, 2020 at 09:38 AM
--- Server version: 5.7.26
--- PHP Version: 7.2.18
+-- Generation Time: Apr 11, 2020 at 11:13 AM
+-- Server version: 8.0.18
+-- PHP Version: 7.4.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -50,7 +50,14 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `appointmentDate` date NOT NULL,
   `appointmentTime` time(6) NOT NULL,
   PRIMARY KEY (`appointmentID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`appointmentID`, `userID`, `doctorID`, `appointmentDate`, `appointmentTime`) VALUES
+(1, '1', '2', '0000-00-00', '00:00:03.000000');
 
 -- --------------------------------------------------------
 
@@ -67,7 +74,14 @@ CREATE TABLE IF NOT EXISTS `doctor` (
   `doctorPassword` varchar(200) NOT NULL,
   `adminID` int(200) NOT NULL,
   PRIMARY KEY (`doctorID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `doctor`
+--
+
+INSERT INTO `doctor` (`doctorID`, `doctorName`, `specialization`, `doctorUsername`, `doctorPassword`, `adminID`) VALUES
+(1, 'SAG', 'dsg', 'dsgv', 'fad', 1);
 
 -- --------------------------------------------------------
 
@@ -83,6 +97,7 @@ CREATE TABLE IF NOT EXISTS `hospital` (
   `hospitalUsername` varchar(200) NOT NULL,
   `hospitalPassword` varchar(200) NOT NULL,
   `adminID` int(200) NOT NULL,
+  `appointmentCharge` varchar(200) NOT NULL,
   PRIMARY KEY (`hospitalID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -90,9 +105,9 @@ CREATE TABLE IF NOT EXISTS `hospital` (
 -- Dumping data for table `hospital`
 --
 
-INSERT INTO `hospital` (`hospitalID`, `hospitalName`, `hospitalAddress`, `hospitalUsername`, `hospitalPassword`, `adminID`) VALUES
-(1, 'Nawaloka', 'Nawaloka Hospital, Malabe', 'navalokamlb', 'malabe123', 0),
-(2, 'gh', 'thht', 'hth', 'thh', 0);
+INSERT INTO `hospital` (`hospitalID`, `hospitalName`, `hospitalAddress`, `hospitalUsername`, `hospitalPassword`, `adminID`, `appointmentCharge`) VALUES
+(1, 'Nawaloka', 'Nawaloka Hospital, Malabe', 'navalokamlb', 'malabe123', 0, ''),
+(2, 'gh', 'thht', 'hth', 'thh', 0, '');
 
 -- --------------------------------------------------------
 
