@@ -88,7 +88,7 @@ public class Doctor {
 
             }
 
-            String query = "select d.doctorName, d.specialization, d.doctorUsername, d.doctorPassword\n" + "from doctor d\n" ;
+            String query = "select doctorID, doctorName, specialization, doctorUsername, doctorPassword from doctor" ;
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
