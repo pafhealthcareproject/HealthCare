@@ -29,6 +29,10 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Jersey Web Application</servlet-name>
+        <url-pattern>/VisitingService/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Jersey Web Application</servlet-name>
         <url-pattern>/PaymentService/*</url-pattern>
     </servlet-mapping>
 

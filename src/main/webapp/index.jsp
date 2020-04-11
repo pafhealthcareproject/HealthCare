@@ -10,5 +10,8 @@
 <a href="AppointmentService/Appointments">Appointments</a>
 <br>
 <br>
+<a href="VisitingService/Visits">Visits</a>
+<br>
+<br>
 <a href="PaymentService/Payments">Payments</a>
 
