@@ -27,7 +27,7 @@ public class Hospital {
 
     }
 
-    public String insertHospital(String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword,String adminID, String hospitalPhone) {
+    public String insertHospital(String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword,String adminID,String appointmentCharge, String hospitalPhone) {
 
         String output = "";
 
@@ -42,7 +42,7 @@ public class Hospital {
             }
 
             // Creating prepared statements
-            String hospitalQuery = "insert into hospital" + "(hospitalID, hospitalName, hospitalAddress, hospitalUsername, hospitalPassword, adminID)" + " values (?, ?, ?, ?, ?, ?)";
+            String hospitalQuery = "insert into hospital" + "(hospitalID, hospitalName, hospitalAddress, hospitalUsername, hospitalPassword, appointmentCharge, adminID)" + " values (?, ?, ?, ?, ?, ?, ?)";
             String hospitalPhoneQuery = "insert into hospitalphone" + "(hospitalID, hospitalPhone)" + " values (?, ?)";
 
             PreparedStatement preparedStmtForHospital = con.prepareStatement(hospitalQuery);
@@ -54,7 +54,8 @@ public class Hospital {
             preparedStmtForHospital.setString(3, hospitalAddress);
             preparedStmtForHospital.setString(4, hospitalUsername);
             preparedStmtForHospital.setString(5, hospitalPassword);
-            preparedStmtForHospital.setInt(6, Integer.parseInt(adminID));
+            preparedStmtForHospital.setString(6, appointmentCharge);
+            preparedStmtForHospital.setInt(7, Integer.parseInt(adminID));
 
 
             // Binding values to hospitalPhone Table
@@ -94,7 +95,7 @@ public class Hospital {
 
             }
 
-            String query = "select h.hospitalID, h.hospitalName, h.hospitalAddress, h.hospitalUsername, h.hospitalPassword, h.adminID, p.hospitalPhone\n" + "from hospital h, hospitalphone p\n" + "where h.hospitalID=p.hospitalID;";
+            String query = "select h.hospitalID, h.hospitalName, h.hospitalAddress, h.hospitalUsername, h.hospitalPassword, h.appointmentCharge, h.adminID, p.hospitalPhone\n" + "from hospital h, hospitalphone p\n" + "where h.hospitalID=p.hospitalID;";
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -106,6 +107,7 @@ public class Hospital {
                 String hospitalAddress = rs.getString("hospitalAddress");
                 String hospitalUsername = rs.getString("hospitalUsername");
                 String hospitalPassword = rs.getString("hospitalPassword");
+                String appointmentCharge = rs.getString("appointmentCharge");
                 String adminID = Integer.toString(rs.getInt("adminID"));
                 String hospitalPhone = rs.getString("hospitalPhone");
 
@@ -117,6 +119,7 @@ public class Hospital {
                 hospitalDetails.addProperty("hospitalPhone", hospitalPhone);
                 hospitalDetails.addProperty("hospitalUsername", hospitalUsername);
                 hospitalDetails.addProperty("hospitalPassword", hospitalPassword);
+                hospitalDetails.addProperty("appointmentCharge", appointmentCharge);
                 hospitalDetails.addProperty("adminID", adminID);
 
                 output = hospitalDetails.toString();
@@ -136,7 +139,7 @@ public class Hospital {
 
     }
 
-    public String updateHospital(String hospitalID, String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword, String hospitalPhone) {
+    public String updateHospital(String hospitalID, String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword, String appointmentCharge, String hospitalPhone) {
 
         String output = "";
 
@@ -151,7 +154,7 @@ public class Hospital {
             }
 
             // Creating prepared statements
-            String hospitalQuery = "UPDATE hospital SET" + " hospitalName=?," + "hospitalAddress=?," + "hospitalUsername=?," + "hospitalPassword=?" + "WHERE hospitalID=?";
+            String hospitalQuery = "UPDATE hospital SET" + " hospitalName=?," + "hospitalAddress=?," + "hospitalUsername=?," + "hospitalPassword=?," + "appointmentCharge=?" + "WHERE hospitalID=?";
             String hospitalPhoneQuery = "UPDATE hospitalphone SET" + " hospitalPhone=?" + "WHERE hospitalID=?";
 
             PreparedStatement hospitalDetails = con.prepareStatement(hospitalQuery);
@@ -162,7 +165,8 @@ public class Hospital {
             hospitalDetails.setString(2, hospitalAddress);
             hospitalDetails.setString(3, hospitalUsername);
             hospitalDetails.setString(4, hospitalPassword);
-            hospitalDetails.setInt(5, Integer.parseInt(hospitalID));
+            hospitalDetails.setString(5, appointmentCharge);
+            hospitalDetails.setInt(6, Integer.parseInt(hospitalID));
 
             // Binding values to hospitalPhoneQuery
             hospitalPhoneDetails.setString(1, hospitalPhone);

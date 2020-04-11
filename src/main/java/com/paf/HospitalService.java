@@ -35,10 +35,11 @@ public class HospitalService {
         String hospitalAddress = hospitalObject.get("hospitalAddress").getAsString();
         String hospitalUsername = hospitalObject.get("hospitalUsername").getAsString();
         String hospitalPassword = hospitalObject.get("hospitalPassword").getAsString();
+        String appointmentCharge = hospitalObject.get("appointmentCharge").getAsString();
         String adminID = hospitalObject.get("adminID").getAsString();
         String hospitalPhone = hospitalObject.get("hospitalPhone").getAsString();
 
-        String output = hospitalObj.insertHospital(hospitalName, hospitalAddress, hospitalUsername, hospitalPassword, adminID, hospitalPhone);
+        String output = hospitalObj.insertHospital(hospitalName, hospitalAddress, hospitalUsername, hospitalPassword, appointmentCharge, adminID, hospitalPhone);
 
         return output;
 
@@ -57,9 +58,10 @@ public class HospitalService {
         String hospitalAddress = hospitalObject.get("hospitalAddress").getAsString();
         String hospitalUsername = hospitalObject.get("hospitalUsername").getAsString();
         String hospitalPassword = hospitalObject.get("hospitalPassword").getAsString();
+        String appointmentCharge = hospitalObject.get("appointmentCharge").getAsString();
         String hospitalPhone = hospitalObject.get("hospitalPhone").getAsString();
 
-        String output = hospitalObj.updateHospital(hospitalID, hospitalName, hospitalAddress, hospitalUsername, hospitalPassword, hospitalPhone);
+        String output = hospitalObj.updateHospital(hospitalID, hospitalName, hospitalAddress, hospitalUsername, hospitalPassword,appointmentCharge, hospitalPhone);
 
         return output;
 
