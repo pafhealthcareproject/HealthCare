@@ -44,9 +44,7 @@ public class Doctor {
             // Creating prepared statements
             String doctorQuery = "insert into doctor" + "(doctorID, doctorName, specialization, doctorUsername, doctorPassword, adminID)" + " values (?, ?, ?, ?, ?, ?)";
 
-
             PreparedStatement preparedStmtForDoctor = con.prepareStatement(doctorQuery);
-
 
             // Binding values to doctor Table
             preparedStmtForDoctor.setInt(1, 0);
@@ -147,10 +145,7 @@ public class Doctor {
             // Creating prepared statements
             String doctorQuery = "UPDATE doctor SET" + " doctorName=?," + "specialization=?," + "doctorUsername=?," + "doctorPassword=?," + "adminID=?" + "WHERE doctorID=?";
 
-
-
             PreparedStatement doctorDetails = con.prepareStatement(doctorQuery);
-
 
             // Binding values to doctorQuery
             doctorDetails.setString(1, doctorName);
@@ -160,11 +155,8 @@ public class Doctor {
             doctorDetails.setString(5, adminID);
             doctorDetails.setInt(6, Integer.parseInt(doctorID));
 
-
-
             // Executing the statements
             doctorDetails.execute();
-
 
             con.close();
 
@@ -198,17 +190,13 @@ public class Doctor {
             // Creating the prepared statements
             String deleteDoctor = "delete from doctor where doctorID=?";
 
-
             PreparedStatement preparedStmtForDoctor = con.prepareStatement(deleteDoctor);
-
 
             // Binding the values
             preparedStmtForDoctor.setInt(1, Integer.parseInt(doctorID));
 
-
             // Executing the statements
             preparedStmtForDoctor.execute();
-
 
             con.close();
 

@@ -38,7 +38,6 @@ public class DoctorService {
         String doctorPassword = doctorObject.get("doctorPassword").getAsString();
         String adminID = doctorObject.get("adminID").getAsString();
 
-
         String output = doctorobj.insertDoctor(doctorName, specialization, doctorUsername,doctorPassword, adminID);
 
         return output;
@@ -59,7 +58,6 @@ public class DoctorService {
         String doctorUsername = doctorObject.get("doctorUsername").getAsString();
         String doctorPassword = doctorObject.get("doctorPassword").getAsString();
         String adminID = doctorObject.get("adminID").getAsString();
-
 
         String output = doctorobj.updateDoctor(doctorID, doctorName, specialization, doctorUsername, doctorPassword, adminID);
 
