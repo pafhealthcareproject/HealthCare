@@ -14,7 +14,7 @@ public class VisitingService {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public String readHospital() {
+    public String readVisit() {
 
         return visitObj.readVisit();
 
@@ -24,19 +24,17 @@ public class VisitingService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String insertHospital(String visitData) {
+    public String insertVisit(String visitData) {
 
         JsonObject visitObject = new JsonParser().parse(visitData).getAsJsonObject();
 
-        String hospitalName = visitObject.get("hospitalName").getAsString();
-        String hospitalAddress = visitObject.get("hospitalAddress").getAsString();
-        String hospitalUsername = visitObject.get("hospitalUsername").getAsString();
-        String hospitalPassword = visitObject.get("hospitalPassword").getAsString();
-        String appointmentCharge = visitObject.get("appointmentCharge").getAsString();
-        String adminID = visitObject.get("adminID").getAsString();
-        String hospitalPhone = visitObject.get("hospitalPhone").getAsString();
 
-        String output = visitObj.insertVisit(hospitalName, hospitalAddress, hospitalUsername, hospitalPassword, appointmentCharge, adminID, hospitalPhone);
+        String hospitalID = visitObject.get("hospitalID").getAsString();
+        String doctorID = visitObject.get("doctorID").getAsString();
+        String visitTime = visitObject.get("visitTime").getAsString();
+
+
+        String output = visitObj.insertVisit(hospitalID, doctorID, visitTime);
 
         return output;
 
@@ -46,19 +44,16 @@ public class VisitingService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String updateHospital(String hospitalData) {
+    public String updateVisit(String visitData) {
 
-        JsonObject hospitalObject = new JsonParser().parse(hospitalData).getAsJsonObject();
+        JsonObject visitObject = new JsonParser().parse(visitData).getAsJsonObject();
 
-        String hospitalID = hospitalObject.get("hospitalID").getAsString();
-        String hospitalName = hospitalObject.get("hospitalName").getAsString();
-        String hospitalAddress = hospitalObject.get("hospitalAddress").getAsString();
-        String hospitalUsername = hospitalObject.get("hospitalUsername").getAsString();
-        String hospitalPassword = hospitalObject.get("hospitalPassword").getAsString();
-        String appointmentCharge = hospitalObject.get("appointmentCharge").getAsString();
-        String hospitalPhone = hospitalObject.get("hospitalPhone").getAsString();
+        String hospitalID = visitObject.get("hospitalID").getAsString();
+        String doctorID = visitObject.get("doctorID").getAsString();
+        String visitTime = visitObject.get("visitTime").getAsString();
 
-        String output = visitObj.updateVisit(hospitalID, hospitalName, hospitalAddress, hospitalUsername, hospitalPassword,appointmentCharge, hospitalPhone);
+
+        String output = visitObj.updateVisit(hospitalID, doctorID, visitTime);
 
         return output;
 
@@ -68,13 +63,13 @@ public class VisitingService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String deleteHospital(String hospitalData) {
+    public String deleteVisit(String visitData) {
 
-        JsonObject hospitalObject = new JsonParser().parse(hospitalData).getAsJsonObject();
+        JsonObject visitObject = new JsonParser().parse(visitData).getAsJsonObject();
 
-        String hospitalID = hospitalObject.get("hospitalID").getAsString();
+        String doctorID = visitObject.get("doctorID").getAsString();
 
-        String output = visitObj.deleteVisit(hospitalID);
+        String output = visitObj.deleteVisit(doctorID);
 
         return output;
 

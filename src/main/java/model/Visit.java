@@ -27,7 +27,7 @@ public class Visit {
 
     }
 
-    public String insertVisit(String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword,String adminID,String appointmentCharge, String hospitalPhone) {
+    public String insertVisit(String hospitalID, String doctorID, String visitTime) {
 
         String output = "";
 
@@ -37,34 +37,32 @@ public class Visit {
 
             if (con == null) {
 
-                return "Database connection error occurred while inserting the hospital details.";
+                return "Database connection error occurred while inserting the visit details.";
 
             }
 
             // Creating prepared statements
-            String hospitalQuery = "insert into hospital" + "(hospitalID, hospitalName, hospitalAddress, hospitalUsername, hospitalPassword, appointmentCharge, adminID)" + " values (?, ?, ?, ?, ?, ?, ?)";
+            String visitQuery = "insert into hospitalvisit" + "(hospitalID, doctorID, visitTime)" + " values (?, ?, ?)";
 
-            PreparedStatement preparedStmtForHospital = con.prepareStatement(hospitalQuery);
+            PreparedStatement preparedStmtForVisit = con.prepareStatement(visitQuery);
 
             // Binding values to hospital Table
-            preparedStmtForHospital.setInt(1, 0);
-            preparedStmtForHospital.setString(2, hospitalName);
-            preparedStmtForHospital.setString(3, hospitalAddress);
-            preparedStmtForHospital.setString(4, hospitalUsername);
-            preparedStmtForHospital.setString(5, hospitalPassword);
-            preparedStmtForHospital.setString(6, appointmentCharge);
-            preparedStmtForHospital.setInt(7, Integer.parseInt(adminID));
+
+            preparedStmtForVisit.setInt(1, Integer.parseInt(hospitalID));
+            preparedStmtForVisit.setInt(2, Integer.parseInt( doctorID));
+            preparedStmtForVisit.setString(3, visitTime);
+
 
             // Executing the statements
-            preparedStmtForHospital.execute();
+            preparedStmtForVisit.execute();
 
             con.close();
 
-            output = "Hospital details inserted successfully.";
+            output = "Visit details inserted successfully.";
 
         } catch (Exception e) {
 
-            output = "An error occurred while inserting the hospital details.";
+            output = "An error occurred while inserting the visit details.";
             System.err.println(e.getMessage());
 
         }
@@ -83,11 +81,11 @@ public class Visit {
 
             if (con == null) {
 
-                return "Database connection error occurred while reading the hospital details.";
+                return "Database connection error occurred while reading the visit details.";
 
             }
 
-            String query = "select h.hospitalID, h.hospitalName, h.hospitalAddress, h.hospitalUsername, h.hospitalPassword, h.appointmentCharge, h.adminID, p.hospitalPhone\n" + "from hospital h, hospitalphone p\n" + "where h.hospitalID=p.hospitalID;";
+            String query = "select v.hospitalID, v.doctorID, v.visitTime\n" + "from hospitalvisit v\n";
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -95,26 +93,17 @@ public class Visit {
             while (rs.next()) {
 
                 String hospitalID = Integer.toString(rs.getInt("hospitalID"));
-                String hospitalName = rs.getString("hospitalName");
-                String hospitalAddress = rs.getString("hospitalAddress");
-                String hospitalUsername = rs.getString("hospitalUsername");
-                String hospitalPassword = rs.getString("hospitalPassword");
-                String appointmentCharge = rs.getString("appointmentCharge");
-                String adminID = Integer.toString(rs.getInt("adminID"));
-                String hospitalPhone = rs.getString("hospitalPhone");
+                String doctorID = Integer.toString(rs.getInt("doctorID"));
+                String visitTime = rs.getString("visitTime");
 
-                JsonObject hospitalDetails = new JsonObject();
 
-                hospitalDetails.addProperty("hospitalID", hospitalID);
-                hospitalDetails.addProperty("hospitalName", hospitalName);
-                hospitalDetails.addProperty("hospitalAddress", hospitalAddress);
-                hospitalDetails.addProperty("hospitalPhone", hospitalPhone);
-                hospitalDetails.addProperty("hospitalUsername", hospitalUsername);
-                hospitalDetails.addProperty("hospitalPassword", hospitalPassword);
-                hospitalDetails.addProperty("appointmentCharge", appointmentCharge);
-                hospitalDetails.addProperty("adminID", adminID);
+                JsonObject visitDetails = new JsonObject();
 
-                output = hospitalDetails.toString();
+                visitDetails.addProperty("hospitalID", hospitalID);
+                visitDetails.addProperty("doctorID", doctorID);
+                visitDetails.addProperty("visitTime", visitTime);
+
+                output = visitDetails.toString();
 
             }
 
@@ -122,7 +111,7 @@ public class Visit {
 
         } catch (Exception e) {
 
-            output = "An error occurred while reading the hospital details.";
+            output = "An error occurred while reading the visit details.";
             System.err.println(e.getMessage());
 
         }
@@ -131,7 +120,7 @@ public class Visit {
 
     }
 
-    public String updateVisit(String hospitalID, String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword, String appointmentCharge, String hospitalPhone) {
+    public String updateVisit(String hospitalID, String doctorID, String visitTime) {
 
         String output = "";
 
@@ -141,33 +130,30 @@ public class Visit {
 
             if (con == null) {
 
-                return "Database connection error occurred while updating the hospital details.";
+                return "Database connection error occurred while updating the visit details.";
 
             }
 
             // Creating prepared statements
-            String hospitalQuery = "UPDATE hospital SET" + " hospitalName=?," + "hospitalAddress=?," + "hospitalUsername=?," + "hospitalPassword=?," + "appointmentCharge=?" + "WHERE hospitalID=?";
+            String visitQuery = "UPDATE hospitalvisit SET" + " hospitalID=?," + "visitTime=?,"  + "WHERE doctorID=?";
 
-            PreparedStatement hospitalDetails = con.prepareStatement(hospitalQuery);
+            PreparedStatement visitDetails = con.prepareStatement(visitQuery);
 
             // Binding values to hospitalQuery
-            hospitalDetails.setString(1, hospitalName);
-            hospitalDetails.setString(2, hospitalAddress);
-            hospitalDetails.setString(3, hospitalUsername);
-            hospitalDetails.setString(4, hospitalPassword);
-            hospitalDetails.setString(5, appointmentCharge);
-            hospitalDetails.setInt(6, Integer.parseInt(hospitalID));
+            visitDetails.setInt(1, Integer.parseInt(hospitalID));
+            visitDetails.setString(2, visitTime);
+            visitDetails.setInt(3, Integer.parseInt(doctorID));
 
             // Executing the statements
-            hospitalDetails.execute();
+            visitDetails.execute();
 
             con.close();
 
-            output = "Hospital details updated successfully.";
+            output = "Visit details updated successfully.";
 
         } catch (Exception e) {
 
-            output = "An error occurred while updating the hospital details.";
+            output = "An error occurred while updating the visit details.";
             System.err.println(e.getMessage());
 
         }
@@ -176,7 +162,7 @@ public class Visit {
 
     }
 
-    public String deleteVisit(String hospitalID) {
+    public String deleteVisit(String doctorID) {
 
         String output = "";
 
@@ -186,28 +172,28 @@ public class Visit {
 
             if (con == null) {
 
-                return "Database connection error occurred while deleting the hospital details.";
+                return "Database connection error occurred while deleting the visit details.";
 
             }
 
             // Creating the prepared statements
-            String deleteHospital = "delete from hospital where hospitalID=?";
+            String deleteVisit = "delete from hospitalvisit where doctorID=?";
 
-            PreparedStatement preparedStmtForHospital = con.prepareStatement(deleteHospital);
+            PreparedStatement preparedStmtForVisit = con.prepareStatement(deleteVisit);
 
             // Binding the values
-            preparedStmtForHospital.setInt(1, Integer.parseInt(hospitalID));
+            preparedStmtForVisit.setInt(1, Integer.parseInt(doctorID));
 
             // Executing the statements
-            preparedStmtForHospital.execute();
+            preparedStmtForVisit.execute();
 
             con.close();
 
-            output = "Hospital details deleted successfully.";
+            output = "Visit details deleted successfully.";
 
         } catch (Exception e) {
 
-            output = "An error occurred while deleting the hospital details.";
+            output = "An error occurred while deleting the visit details.";
             System.err.println(e.getMessage());
 
         }
