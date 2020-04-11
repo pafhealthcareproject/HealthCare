@@ -27,7 +27,7 @@ public class Hospital {
 
     }
 
-    public String insertHospital(String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword, String hospitalPhone) {
+    public String insertHospital(String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword,String adminID, String hospitalPhone) {
 
         String output = "";
 
@@ -42,7 +42,7 @@ public class Hospital {
             }
 
             // Creating prepared statements
-            String hospitalQuery = "insert into hospital" + "(hospitalID, hospitalName, hospitalAddress, hospitalUsername, hospitalPassword)" + " values (?, ?, ?, ?, ?)";
+            String hospitalQuery = "insert into hospital" + "(hospitalID, hospitalName, hospitalAddress, hospitalUsername, hospitalPassword, adminID)" + " values (?, ?, ?, ?, ?, ?)";
             String hospitalPhoneQuery = "insert into hospitalphone" + "(hospitalID, hospitalPhone)" + " values (?, ?)";
 
             PreparedStatement preparedStmtForHospital = con.prepareStatement(hospitalQuery);
@@ -54,6 +54,8 @@ public class Hospital {
             preparedStmtForHospital.setString(3, hospitalAddress);
             preparedStmtForHospital.setString(4, hospitalUsername);
             preparedStmtForHospital.setString(5, hospitalPassword);
+            preparedStmtForHospital.setInt(6, Integer.parseInt(adminID));
+
 
             // Binding values to hospitalPhone Table
             preparedStmtForHospitalPhone.setInt(1, 0);
@@ -92,7 +94,7 @@ public class Hospital {
 
             }
 
-            String query = "select h.hospitalID, h.hospitalName, h.hospitalAddress, h.hospitalUsername, h.hospitalPassword, p.hospitalPhone\n" + "from hospital h, hospitalphone p\n" + "where h.hospitalID=p.hospitalID;";
+            String query = "select h.hospitalID, h.hospitalName, h.hospitalAddress, h.hospitalUsername, h.hospitalPassword, h.adminID, p.hospitalPhone\n" + "from hospital h, hospitalphone p\n" + "where h.hospitalID=p.hospitalID;";
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -104,6 +106,7 @@ public class Hospital {
                 String hospitalAddress = rs.getString("hospitalAddress");
                 String hospitalUsername = rs.getString("hospitalUsername");
                 String hospitalPassword = rs.getString("hospitalPassword");
+                String adminID = Integer.toString(rs.getInt("adminID"));
                 String hospitalPhone = rs.getString("hospitalPhone");
 
                 JsonObject hospitalDetails = new JsonObject();
@@ -114,6 +117,7 @@ public class Hospital {
                 hospitalDetails.addProperty("hospitalPhone", hospitalPhone);
                 hospitalDetails.addProperty("hospitalUsername", hospitalUsername);
                 hospitalDetails.addProperty("hospitalPassword", hospitalPassword);
+                hospitalDetails.addProperty("adminID", adminID);
 
                 output = hospitalDetails.toString();
 
