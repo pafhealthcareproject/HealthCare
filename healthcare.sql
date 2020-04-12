@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Apr 11, 2020 at 11:13 AM
+-- Generation Time: Apr 12, 2020 at 08:23 AM
 -- Server version: 8.0.18
 -- PHP Version: 7.4.0
 
@@ -74,14 +74,15 @@ CREATE TABLE IF NOT EXISTS `doctor` (
   `doctorPassword` varchar(200) NOT NULL,
   `adminID` int(200) NOT NULL,
   PRIMARY KEY (`doctorID`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `doctor`
 --
 
 INSERT INTO `doctor` (`doctorID`, `doctorName`, `specialization`, `doctorUsername`, `doctorPassword`, `adminID`) VALUES
-(1, 'SAG', 'dsg', 'dsgv', 'fad', 1);
+(1, 'SAG', 'dsg', 'dsgv', 'fad', 1),
+(2, 'sg', 'd', 'dzh', 'hd', 1);
 
 -- --------------------------------------------------------
 
@@ -138,10 +139,12 @@ INSERT INTO `hospitalphone` (`hospitalID`, `hospitalPhone`) VALUES
 
 DROP TABLE IF EXISTS `hospitalvisit`;
 CREATE TABLE IF NOT EXISTS `hospitalvisit` (
+  `visitID` int(200) NOT NULL AUTO_INCREMENT,
   `hospitalID` varchar(200) NOT NULL,
   `doctorID` varchar(200) NOT NULL,
-  `visitTime` time(6) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `visitTime` time(6) NOT NULL,
+  PRIMARY KEY (`visitID`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
