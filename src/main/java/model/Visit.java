@@ -1,8 +1,11 @@
 package model;
 
+import beans.VisitBean;
 import com.google.gson.JsonObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Visit {
 
@@ -27,7 +30,7 @@ public class Visit {
 
     }
 
-    public String insertVisit(String hospitalID, String doctorID, String visitTime) {
+    public String insertVisit(VisitBean visit){
 
         String output = "";
 
@@ -42,16 +45,15 @@ public class Visit {
             }
 
             // Creating prepared statements
-            String visitQuery = "insert into hospitalvisit" + "(hospitalID, doctorID, visitTime)" + " values (?, ?, ?)";
+            String visitQuery = "insert into hospitalvisit" + "(visitID, hospitalID, doctorID, visitTime)" + " values (?, ?, ?, ?)";
 
             PreparedStatement preparedStmtForVisit = con.prepareStatement(visitQuery);
 
             // Binding values to hospitalvisit Table
-
-            preparedStmtForVisit.setInt(1, Integer.parseInt(hospitalID));
-            preparedStmtForVisit.setInt(2, Integer.parseInt( doctorID));
-            preparedStmtForVisit.setString(3, visitTime);
-
+            preparedStmtForVisit.setInt(1, 0);
+            preparedStmtForVisit.setInt(2, Integer.parseInt(visit.getHospitalID()));
+            preparedStmtForVisit.setInt(3, Integer.parseInt(visit.getDoctorID()));
+            preparedStmtForVisit.setString(4, visit.getVisitTime());
 
             // Executing the statements
             preparedStmtForVisit.execute();
@@ -71,7 +73,9 @@ public class Visit {
 
     }
 
-    public String readVisit() {
+    public List<VisitBean> readVisit()  {
+
+        List<VisitBean> visitList = new ArrayList<>();
 
         String output = "";
 
@@ -81,29 +85,28 @@ public class Visit {
 
             if (con == null) {
 
-                return "Database connection error occurred while reading the visit details.";
-
+                System.out.println("Database connection error occurred while reading the visit details.");
+                return visitList;
             }
 
-            String query = "select v.hospitalID, v.doctorID, v.visitTime\n" + "from hospitalvisit v\n";
+            String query = "select v.visitID, v.hospitalID, v.doctorID, v.visitTime\n" + "from hospitalvisit v\n";
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
+
             while (rs.next()) {
 
-                String hospitalID = Integer.toString(rs.getInt("hospitalID"));
-                String doctorID = Integer.toString(rs.getInt("doctorID"));
-                String visitTime = rs.getString("visitTime");
+                VisitBean visit = new VisitBean(
 
+                        rs.getInt("visitID"),
+                        rs.getString("hospitalID"),
+                        rs.getString("doctorID"),
+                        rs.getString("visitTime")
 
-                JsonObject visitDetails = new JsonObject();
+                );
 
-                visitDetails.addProperty("hospitalID", hospitalID);
-                visitDetails.addProperty("doctorID", doctorID);
-                visitDetails.addProperty("visitTime", visitTime);
-
-                output = visitDetails.toString();
+                visitList.add(visit);
 
             }
 
@@ -111,16 +114,16 @@ public class Visit {
 
         } catch (Exception e) {
 
-            output = "An error occurred while reading the visit details.";
+            System.out.println("An error occurred while reading the visit details.");
             System.err.println(e.getMessage());
 
         }
 
-        return output;
+        return visitList;
 
     }
 
-    public String updateVisit(String hospitalID, String doctorID, String visitTime) {
+    public String updateVisit(VisitBean visit) {
 
         String output = "";
 
@@ -140,9 +143,10 @@ public class Visit {
             PreparedStatement visitDetails = con.prepareStatement(visitQuery);
 
             // Binding values to visitQuery
-            visitDetails.setInt(1, Integer.parseInt(hospitalID));
-            visitDetails.setString(2, visitTime);
-            visitDetails.setInt(3, Integer.parseInt(doctorID));
+
+            visitDetails.setString(1, visit.getHospitalID());
+            visitDetails.setString(2, visit.getVisitTime());
+            visitDetails.setString(3, visit.getDoctorID());
 
             // Executing the statements
             visitDetails.execute();
@@ -162,7 +166,7 @@ public class Visit {
 
     }
 
-    public String deleteVisit(String doctorID) {
+    public String deleteVisit(String ID) {
 
         String output = "";
 
@@ -182,7 +186,7 @@ public class Visit {
             PreparedStatement preparedStmtForVisit = con.prepareStatement(deleteVisit);
 
             // Binding the values
-            preparedStmtForVisit.setInt(1, Integer.parseInt(doctorID));
+            preparedStmtForVisit.setInt(1, Integer.parseInt(ID));
 
             // Executing the statements
             preparedStmtForVisit.execute();

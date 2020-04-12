@@ -2,9 +2,17 @@ package com.paf;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+
+import beans.HospitalBean;
+import beans.VisitBean;
 import com.google.gson.*;
+import org.jsoup.*;
+import org.jsoup.parser.*;
+import org.jsoup.nodes.*;
 
 import model.Visit;
+
+import java.util.List;
 
 @Path("/Visits")
 public class VisitingService {
@@ -14,7 +22,7 @@ public class VisitingService {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public String readVisit() {
+    public List<VisitBean> readVisit() {
 
         return visitObj.readVisit();
 
@@ -26,14 +34,8 @@ public class VisitingService {
     @Produces(MediaType.TEXT_PLAIN)
     public String insertVisit(String visitData) {
 
-        JsonObject visitObject = new JsonParser().parse(visitData).getAsJsonObject();
-
-        String hospitalID = visitObject.get("hospitalID").getAsString();
-        String doctorID = visitObject.get("doctorID").getAsString();
-        String visitTime = visitObject.get("visitTime").getAsString();
-
-
-        String output = visitObj.insertVisit(hospitalID, doctorID, visitTime);
+        VisitBean visit = new VisitBean(visitData);
+        String output =	visitObj.insertVisit(visit);
 
         return output;
 
@@ -45,14 +47,8 @@ public class VisitingService {
     @Produces(MediaType.TEXT_PLAIN)
     public String updateVisit(String visitData) {
 
-        JsonObject visitObject = new JsonParser().parse(visitData).getAsJsonObject();
-
-        String hospitalID = visitObject.get("hospitalID").getAsString();
-        String doctorID = visitObject.get("doctorID").getAsString();
-        String visitTime = visitObject.get("visitTime").getAsString();
-
-
-        String output = visitObj.updateVisit(hospitalID, doctorID, visitTime);
+        VisitBean visit = new VisitBean (visitData);
+        String output =	visitObj.updateVisit(visit);
 
         return output;
 
@@ -65,10 +61,9 @@ public class VisitingService {
     public String deleteVisit(String visitData) {
 
         JsonObject visitObject = new JsonParser().parse(visitData).getAsJsonObject();
+        String visitID = visitObject.get("visitID").getAsString();
 
-        String doctorID = visitObject.get("doctorID").getAsString();
-
-        String output = visitObj.deleteVisit(doctorID);
+        String output = visitObj.deleteVisit(visitID);
 
         return output;
 
