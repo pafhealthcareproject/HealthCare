@@ -8,6 +8,7 @@ import model.User;
 
 @XmlRootElement
 public class UserBean {
+
     int id;
     private String firstName;
     private String lastName;
