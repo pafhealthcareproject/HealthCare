@@ -1,11 +1,17 @@
 package com.paf;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+
+import beans.UserBean;
+import com.google.gson.*;
+import org.jsoup.*;
+import org.jsoup.parser.*;
+import org.jsoup.nodes.*;
+
 import model.User;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/Users")
 public class UserService {
@@ -15,10 +21,8 @@ public class UserService {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public String readUser() {
-
+    public List<UserBean> readUser() {
         return userObj.readUser();
-
     }
 
     @POST
@@ -27,19 +31,8 @@ public class UserService {
     @Produces(MediaType.TEXT_PLAIN)
     public String insertUser(String userData) {
 
-        JsonObject userObject = new JsonParser().parse(userData).getAsJsonObject();
-
-        String firstName = userObject.get("firstName").getAsString();
-        String lastName = userObject.get("lastName").getAsString();
-        String age = userObject.get("age").getAsString();
-        String gender = userObject.get("gender").getAsString();
-        String email = userObject.get("email").getAsString();
-        String address = userObject.get("address").getAsString();
-        String username = userObject.get("username").getAsString();
-        String password = userObject.get("password").getAsString();
-        String userPhone = userObject.get("userPhone").getAsString();
-
-        String output = userObj.insertUser(firstName, lastName, age, gender, email, address, username, password, userPhone);
+        UserBean usr = new UserBean(userData);
+        String output =	userObj.insertUser(usr);
 
         return output;
 
@@ -51,20 +44,8 @@ public class UserService {
     @Produces(MediaType.TEXT_PLAIN)
     public String updateUser(String userData) {
 
-        JsonObject userObject = new JsonParser().parse(userData).getAsJsonObject();
-
-        String userID = userObject.get("userID").getAsString();
-        String firstName = userObject.get("firstName").getAsString();
-        String lastName = userObject.get("lastName").getAsString();
-        String age = userObject.get("age").getAsString();
-        String gender = userObject.get("gender").getAsString();
-        String email = userObject.get("email").getAsString();
-        String address = userObject.get("address").getAsString();
-        String username = userObject.get("username").getAsString();
-        String password = userObject.get("password").getAsString();
-        String userPhone = userObject.get("userPhone").getAsString();
-
-        String output = userObj.updateUser(userID, firstName, lastName, age, gender, email, address, username, password, userPhone);
+        UserBean usr = new UserBean(userData);
+        String output =	userObj.updateUser(usr);
 
         return output;
 
@@ -77,7 +58,6 @@ public class UserService {
     public String deleteUser(String userData) {
 
         JsonObject userObject = new JsonParser().parse(userData).getAsJsonObject();
-
         String userID = userObject.get("userID").getAsString();
 
         String output = userObj.deleteUser(userID);
