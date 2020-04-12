@@ -177,7 +177,7 @@ public class Visit {
             }
 
             // Creating the prepared statements
-            String deleteVisit = "delete from hospitalvisit where doctorID=?";
+            String deleteVisit = "delete from hospitalvisit where visitID=?";
 
             PreparedStatement preparedStmtForVisit = con.prepareStatement(deleteVisit);
 
