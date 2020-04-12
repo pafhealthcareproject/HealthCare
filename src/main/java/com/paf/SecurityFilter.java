@@ -20,7 +20,7 @@ import util.DBConnection;
 public class SecurityFilter implements ContainerRequestFilter {
 
     public static final String AUTHENTICATION_HEADER_KEY = "Authorization";
-    public static final String AUTHENTICATION_HEADER_PREFIX = "Basic ";
+    public static final String AUTHENTICATION_HEADER_PREFIX = "Basic";
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
