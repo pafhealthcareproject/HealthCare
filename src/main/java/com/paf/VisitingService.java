@@ -28,7 +28,6 @@ public class VisitingService {
 
         JsonObject visitObject = new JsonParser().parse(visitData).getAsJsonObject();
 
-
         String hospitalID = visitObject.get("hospitalID").getAsString();
         String doctorID = visitObject.get("doctorID").getAsString();
         String visitTime = visitObject.get("visitTime").getAsString();
