@@ -147,9 +147,7 @@ public class Appointment {
             // Creating prepared statements
             String appointmentQuery = "UPDATE appointment SET" + " userID=?," + "doctorID=?," + "appointmentDate=?," + "appointmentTime=?" + "WHERE appointmentID=?";
 
-
             PreparedStatement appointmentDetails = con.prepareStatement(appointmentQuery);
-
 
             // Binding values to appointmentQuery
             appointmentDetails.setString(1, userID);
