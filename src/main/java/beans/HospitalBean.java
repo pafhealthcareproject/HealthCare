@@ -21,18 +21,18 @@ public class HospitalBean {
 
     public HospitalBean(String hosp) {
 
-        JsonObject scheduleObject = new JsonParser().parse(hosp).getAsJsonObject();
+        JsonObject hospitalObject = new JsonParser().parse(hosp).getAsJsonObject();
 
-        if (scheduleObject.get("hospitalID") !=null) {
-            this.id = scheduleObject.get("hospitalID").getAsInt();
+        if (hospitalObject.get("hospitalID") !=null) {
+            this.id = hospitalObject.get("hospitalID").getAsInt();
         }
-        this.hospitalName = scheduleObject.get("hospitalName").getAsString();
-        this.hospitalAddress = scheduleObject.get("hospitalAddress").getAsString();
-        this.hospitalUsername = scheduleObject.get("hospitalUsername").getAsString();
-        this.hospitalPassword = scheduleObject.get("hospitalPassword").getAsString();
-        this.appointmentCharge = scheduleObject.get("appointmentCharge").getAsString();
-        this.adminID = scheduleObject.get("adminID").getAsString();
-        this.hospitalPhone = scheduleObject.get("hospitalPhone").getAsString();
+        this.hospitalName = hospitalObject.get("hospitalName").getAsString();
+        this.hospitalAddress = hospitalObject.get("hospitalAddress").getAsString();
+        this.hospitalUsername = hospitalObject.get("hospitalUsername").getAsString();
+        this.hospitalPassword = hospitalObject.get("hospitalPassword").getAsString();
+        this.appointmentCharge = hospitalObject.get("appointmentCharge").getAsString();
+        this.adminID = hospitalObject.get("adminID").getAsString();
+        this.hospitalPhone = hospitalObject.get("hospitalPhone").getAsString();
 
     }
 
