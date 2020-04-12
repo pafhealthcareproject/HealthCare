@@ -46,7 +46,7 @@ public class Visit {
 
             PreparedStatement preparedStmtForVisit = con.prepareStatement(visitQuery);
 
-            // Binding values to hospital Table
+            // Binding values to hospitalvisit Table
 
             preparedStmtForVisit.setInt(1, Integer.parseInt(hospitalID));
             preparedStmtForVisit.setInt(2, Integer.parseInt( doctorID));
@@ -139,7 +139,7 @@ public class Visit {
 
             PreparedStatement visitDetails = con.prepareStatement(visitQuery);
 
-            // Binding values to hospitalQuery
+            // Binding values to visitQuery
             visitDetails.setInt(1, Integer.parseInt(hospitalID));
             visitDetails.setString(2, visitTime);
             visitDetails.setInt(3, Integer.parseInt(doctorID));
