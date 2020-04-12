@@ -15,12 +15,13 @@ public class HospitalBean {
     private String hospitalPassword;
     private String appointmentCharge;
     private String adminID;
+    private String hospitalPhone;
 
     public HospitalBean() {}
 
-    public HospitalBean(String a) {
+    public HospitalBean(String hosp) {
 
-        JsonObject scheduleObject = new JsonParser().parse(a).getAsJsonObject();
+        JsonObject scheduleObject = new JsonParser().parse(hosp).getAsJsonObject();
 
         if (scheduleObject.get("hospitalID") !=null) {
             this.id = scheduleObject.get("hospitalID").getAsInt();
@@ -31,10 +32,11 @@ public class HospitalBean {
         this.hospitalPassword = scheduleObject.get("hospitalPassword").getAsString();
         this.appointmentCharge = scheduleObject.get("appointmentCharge").getAsString();
         this.adminID = scheduleObject.get("adminID").getAsString();
+        this.hospitalPhone = scheduleObject.get("hospitalPhone").getAsString();
 
     }
 
-    public HospitalBean(int id, String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword, String appointmentCharge, String adminID) {
+    public HospitalBean(int id, String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword, String appointmentCharge, String adminID, String hospitalPhone) {
 
         this.id = id;
         this.hospitalName = hospitalName;
@@ -43,10 +45,11 @@ public class HospitalBean {
         this.hospitalPassword = hospitalPassword;
         this.appointmentCharge = appointmentCharge;
         this.adminID = adminID;
+        this.hospitalPhone = hospitalPhone;
 
     }
 
-    public HospitalBean(String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword, String appointmentCharge, String adminID){
+    public HospitalBean(String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword, String appointmentCharge, String adminID, String hospitalPhone){
 
         this.hospitalName = hospitalName;
         this.hospitalAddress = hospitalAddress;
@@ -54,6 +57,7 @@ public class HospitalBean {
         this.hospitalPassword = hospitalPassword;
         this.appointmentCharge = appointmentCharge;
         this.adminID = adminID;
+        this.hospitalPhone = hospitalPhone;
 
     }
 
@@ -111,6 +115,14 @@ public class HospitalBean {
 
     public void setAdminID(String adminID) {
         this.adminID = adminID;
+    }
+
+    public String getHospitalPhone() {
+        return hospitalPhone;
+    }
+
+    public void setHospitalPhone(String hospitalPhone) {
+        this.hospitalPhone = hospitalPhone;
     }
 
 }

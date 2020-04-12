@@ -1,8 +1,11 @@
 package model;
 
+import beans.HospitalBean;
 import com.google.gson.JsonObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Hospital {
 
@@ -27,7 +30,7 @@ public class Hospital {
 
     }
 
-    public String insertHospital(String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword,String adminID,String appointmentCharge, String hospitalPhone) {
+    public String insertHospital(HospitalBean hosp){
 
         String output = "";
 
@@ -50,17 +53,16 @@ public class Hospital {
 
             // Binding values to hospital Table
             preparedStmtForHospital.setInt(1, 0);
-            preparedStmtForHospital.setString(2, hospitalName);
-            preparedStmtForHospital.setString(3, hospitalAddress);
-            preparedStmtForHospital.setString(4, hospitalUsername);
-            preparedStmtForHospital.setString(5, hospitalPassword);
-            preparedStmtForHospital.setString(6, appointmentCharge);
-            preparedStmtForHospital.setInt(7, Integer.parseInt(adminID));
-
+            preparedStmtForHospital.setString(2, hosp.getHospitalName());
+            preparedStmtForHospital.setString(3, hosp.getHospitalAddress());
+            preparedStmtForHospital.setString(4, hosp.getHospitalUsername());
+            preparedStmtForHospital.setString(5, hosp.getHospitalPassword());
+            preparedStmtForHospital.setString(6, hosp.getAppointmentCharge());
+            preparedStmtForHospital.setInt(7, Integer.parseInt(hosp.getAdminID()));
 
             // Binding values to hospitalPhone Table
             preparedStmtForHospitalPhone.setInt(1, 0);
-            preparedStmtForHospitalPhone.setString(2, hospitalPhone);
+            preparedStmtForHospitalPhone.setString(2, hosp.getHospitalPhone());
 
             // Executing the statements
             preparedStmtForHospital.execute();
@@ -81,7 +83,9 @@ public class Hospital {
 
     }
 
-    public String readHospital() {
+    public List<HospitalBean> readHospital()  {
+
+        List<HospitalBean> hospList = new ArrayList<>();
 
         String output = "";
 
@@ -91,8 +95,8 @@ public class Hospital {
 
             if (con == null) {
 
-                return "Database connection error occurred while reading the hospital details.";
-
+                System.out.println("Database connection error occurred while reading the hospital details.");
+                return hospList;
             }
 
             String query = "select h.hospitalID, h.hospitalName, h.hospitalAddress, h.hospitalUsername, h.hospitalPassword, h.appointmentCharge, h.adminID, p.hospitalPhone\n" + "from hospital h, hospitalphone p\n" + "where h.hospitalID=p.hospitalID;";
@@ -102,27 +106,20 @@ public class Hospital {
 
             while (rs.next()) {
 
-                String hospitalID = Integer.toString(rs.getInt("hospitalID"));
-                String hospitalName = rs.getString("hospitalName");
-                String hospitalAddress = rs.getString("hospitalAddress");
-                String hospitalUsername = rs.getString("hospitalUsername");
-                String hospitalPassword = rs.getString("hospitalPassword");
-                String appointmentCharge = rs.getString("appointmentCharge");
-                String adminID = Integer.toString(rs.getInt("adminID"));
-                String hospitalPhone = rs.getString("hospitalPhone");
+                HospitalBean hosp = new HospitalBean(
 
-                JsonObject hospitalDetails = new JsonObject();
+                        rs.getInt("hospitalID"),
+                        rs.getString("hospitalName"),
+                        rs.getString("hospitalAddress"),
+                        rs.getString("hospitalUsername"),
+                        rs.getString("hospitalPassword"),
+                        rs.getString("appointmentCharge"),
+                        rs.getString("adminID"),
+                        rs.getString("hospitalPhone")
 
-                hospitalDetails.addProperty("hospitalID", hospitalID);
-                hospitalDetails.addProperty("hospitalName", hospitalName);
-                hospitalDetails.addProperty("hospitalAddress", hospitalAddress);
-                hospitalDetails.addProperty("hospitalPhone", hospitalPhone);
-                hospitalDetails.addProperty("hospitalUsername", hospitalUsername);
-                hospitalDetails.addProperty("hospitalPassword", hospitalPassword);
-                hospitalDetails.addProperty("appointmentCharge", appointmentCharge);
-                hospitalDetails.addProperty("adminID", adminID);
+                        );
 
-                output = hospitalDetails.toString();
+                hospList.add(hosp);
 
             }
 
@@ -130,16 +127,16 @@ public class Hospital {
 
         } catch (Exception e) {
 
-            output = "An error occurred while reading the hospital details.";
+            System.out.println("An error occurred while reading the hospital details.");
             System.err.println(e.getMessage());
 
         }
 
-        return output;
+        return hospList;
 
     }
 
-    public String updateHospital(String hospitalID, String hospitalName, String hospitalAddress, String hospitalUsername, String hospitalPassword, String appointmentCharge, String hospitalPhone) {
+    public String updateHospital(HospitalBean hosp) {
 
         String output = "";
 
@@ -161,16 +158,16 @@ public class Hospital {
             PreparedStatement hospitalPhoneDetails = con.prepareStatement(hospitalPhoneQuery);
 
             // Binding values to hospitalQuery
-            hospitalDetails.setString(1, hospitalName);
-            hospitalDetails.setString(2, hospitalAddress);
-            hospitalDetails.setString(3, hospitalUsername);
-            hospitalDetails.setString(4, hospitalPassword);
-            hospitalDetails.setString(5, appointmentCharge);
-            hospitalDetails.setInt(6, Integer.parseInt(hospitalID));
+            hospitalDetails.setString(1, hosp.getHospitalName());
+            hospitalDetails.setString(2, hosp.getHospitalAddress());
+            hospitalDetails.setString(3, hosp.getHospitalUsername());
+            hospitalDetails.setString(4, hosp.getHospitalPassword());
+            hospitalDetails.setString(5, hosp.getAppointmentCharge());
+            hospitalDetails.setInt(6, hosp.getId());
 
             // Binding values to hospitalPhoneQuery
-            hospitalPhoneDetails.setString(1, hospitalPhone);
-            hospitalPhoneDetails.setInt(2, Integer.parseInt(hospitalID));
+            hospitalPhoneDetails.setString(1, hosp.getHospitalPhone());
+            hospitalPhoneDetails.setInt(2, hosp.getId());
 
             // Executing the statements
             hospitalDetails.execute();
@@ -191,7 +188,7 @@ public class Hospital {
 
     }
 
-    public String deleteHospital(String hospitalID) {
+    public String deleteHospital(String ID) {
 
         String output = "";
 
@@ -213,8 +210,8 @@ public class Hospital {
             PreparedStatement preparedStmtForHospitalPhone = con.prepareStatement(deleteHospitalPhone);
 
             // Binding the values
-            preparedStmtForHospital.setInt(1, Integer.parseInt(hospitalID));
-            preparedStmtForHospitalPhone.setInt(1, Integer.parseInt(hospitalID));
+            preparedStmtForHospital.setInt(1, Integer.parseInt(ID));
+            preparedStmtForHospitalPhone.setInt(1, Integer.parseInt(ID));
 
             // Executing the statements
             preparedStmtForHospital.execute();

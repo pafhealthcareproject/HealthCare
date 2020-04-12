@@ -2,12 +2,16 @@ package com.paf;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+
+import beans.HospitalBean;
 import com.google.gson.*;
 import org.jsoup.*;
 import org.jsoup.parser.*;
 import org.jsoup.nodes.*;
 
 import model.Hospital;
+
+import java.util.List;
 
 @Path("/Hospitals")
 public class HospitalService {
@@ -17,10 +21,8 @@ public class HospitalService {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public String readHospital() {
-
+    public List<HospitalBean> readHospital() {
         return hospitalObj.readHospital();
-
     }
 
     @POST
@@ -29,17 +31,8 @@ public class HospitalService {
     @Produces(MediaType.TEXT_PLAIN)
     public String insertHospital(String hospitalData) {
 
-        JsonObject hospitalObject = new JsonParser().parse(hospitalData).getAsJsonObject();
-
-        String hospitalName = hospitalObject.get("hospitalName").getAsString();
-        String hospitalAddress = hospitalObject.get("hospitalAddress").getAsString();
-        String hospitalUsername = hospitalObject.get("hospitalUsername").getAsString();
-        String hospitalPassword = hospitalObject.get("hospitalPassword").getAsString();
-        String appointmentCharge = hospitalObject.get("appointmentCharge").getAsString();
-        String adminID = hospitalObject.get("adminID").getAsString();
-        String hospitalPhone = hospitalObject.get("hospitalPhone").getAsString();
-
-        String output = hospitalObj.insertHospital(hospitalName, hospitalAddress, hospitalUsername, hospitalPassword, appointmentCharge, adminID, hospitalPhone);
+        HospitalBean hosp = new HospitalBean(hospitalData);
+        String output =	hospitalObj.insertHospital(hosp);
 
         return output;
 
@@ -51,17 +44,8 @@ public class HospitalService {
     @Produces(MediaType.TEXT_PLAIN)
     public String updateHospital(String hospitalData) {
 
-        JsonObject hospitalObject = new JsonParser().parse(hospitalData).getAsJsonObject();
-
-        String hospitalID = hospitalObject.get("hospitalID").getAsString();
-        String hospitalName = hospitalObject.get("hospitalName").getAsString();
-        String hospitalAddress = hospitalObject.get("hospitalAddress").getAsString();
-        String hospitalUsername = hospitalObject.get("hospitalUsername").getAsString();
-        String hospitalPassword = hospitalObject.get("hospitalPassword").getAsString();
-        String appointmentCharge = hospitalObject.get("appointmentCharge").getAsString();
-        String hospitalPhone = hospitalObject.get("hospitalPhone").getAsString();
-
-        String output = hospitalObj.updateHospital(hospitalID, hospitalName, hospitalAddress, hospitalUsername, hospitalPassword,appointmentCharge, hospitalPhone);
+        HospitalBean hosp = new HospitalBean(hospitalData);
+        String output =	hospitalObj.updateHospital(hosp);
 
         return output;
 
@@ -74,7 +58,6 @@ public class HospitalService {
     public String deleteHospital(String hospitalData) {
 
         JsonObject hospitalObject = new JsonParser().parse(hospitalData).getAsJsonObject();
-
         String hospitalID = hospitalObject.get("hospitalID").getAsString();
 
         String output = hospitalObj.deleteHospital(hospitalID);
