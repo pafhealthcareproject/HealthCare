@@ -3,7 +3,6 @@ package model;
 import beans.AppointmentBean;
 import com.google.gson.JsonObject;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
@@ -48,9 +47,7 @@ public class Appointment {
             // Creating prepared statements
             String appointmentQuery = "insert into appointment" + "(appointmentID, userID, doctorID, appointmentDate, appointmentTime)" + " values (?, ?, ?, ?, ?)";
 
-
             PreparedStatement preparedStmtForAppointment = con.prepareStatement(appointmentQuery);
-
 
             // Binding values to Appointment Table
             preparedStmtForAppointment.setInt(1, 0);
@@ -59,11 +56,8 @@ public class Appointment {
             preparedStmtForAppointment.setString(4, app.getAppointmentDate());
             preparedStmtForAppointment.setString(5, app.getAppointmentTime());
 
-
-
             // Executing the statements
             preparedStmtForAppointment.execute();
-
 
             con.close();
 
@@ -92,7 +86,7 @@ public class Appointment {
 
             if (con == null) {
 
-                System.out.println( "Database connection error occurred while reading the appointment details.");
+                System.out.println("Database connection error occurred while reading the appointment details.");
                 return appList;
             }
 
@@ -119,7 +113,7 @@ public class Appointment {
 
         } catch (Exception e) {
 
-            System.out.println( "An error occurred while reading the appointment details.");
+            System.out.println("An error occurred while reading the appointment details.");
             System.err.println(e.getMessage());
 
         }
@@ -154,11 +148,8 @@ public class Appointment {
             appointmentDetails.setString(4, app.getAppointmentTime());
             appointmentDetails.setInt(5, app.getId());
 
-
-
             // Executing the statements
             appointmentDetails.execute();
-
 
             con.close();
 
@@ -192,17 +183,13 @@ public class Appointment {
             // Creating the prepared statements
             String deleteAppointment = "delete from appointment where appointmentID=?";
 
-
             PreparedStatement preparedStmtForAppointment = con.prepareStatement(deleteAppointment);
-
 
             // Binding the values
             preparedStmtForAppointment.setInt(1, Integer.parseInt(ID));
 
-
             // Executing the statements
             preparedStmtForAppointment.execute();
-
 
             con.close();
 
