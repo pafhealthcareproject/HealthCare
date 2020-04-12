@@ -1,7 +1,11 @@
 package model;
 
+import beans.AppointmentBean;
 import com.google.gson.JsonObject;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.*;
 
 public class Appointment {
@@ -27,7 +31,7 @@ public class Appointment {
 
     }
 
-    public String insertAppointment(String userID, String doctorID, String appointmentDate, String appointmentTime) {
+    public String insertAppointment(AppointmentBean app) {
 
         String output = "";
 
@@ -50,10 +54,10 @@ public class Appointment {
 
             // Binding values to Appointment Table
             preparedStmtForAppointment.setInt(1, 0);
-            preparedStmtForAppointment.setString(2, userID);
-            preparedStmtForAppointment.setString(3, doctorID);
-            preparedStmtForAppointment.setString(4, appointmentDate);
-            preparedStmtForAppointment.setString(5, appointmentTime);
+            preparedStmtForAppointment.setString(2, app.getUserID());
+            preparedStmtForAppointment.setString(3, app.getDoctorID());
+            preparedStmtForAppointment.setString(4, app.getAppointmentDate());
+            preparedStmtForAppointment.setString(5, app.getAppointmentTime());
 
 
 
@@ -76,7 +80,9 @@ public class Appointment {
 
     }
 
-    public String readAppointment() {
+    public List<AppointmentBean> readAppointment() {
+
+        List<AppointmentBean> appList = new ArrayList<>();
 
         String output = "";
 
@@ -86,34 +92,26 @@ public class Appointment {
 
             if (con == null) {
 
-                return "Database connection error occurred while reading the appointment details.";
-
+                System.out.println( "Database connection error occurred while reading the appointment details.");
+                return appList;
             }
 
-            String query = "select appointmentID, userID, doctorID, appointmentDate, appointmentTime\n" + "from appointment a\n" ;
+            String query = "select a.appointmentID, a.userID, a.doctorID, a.appointmentDate, a.appointmentTime\n" + "from appointment a\n" ;
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
 
-                String appointmentID = Integer.toString(rs.getInt("appointmentID"));
-                String userID = rs.getString("userID");
-                String doctorID = rs.getString("doctorID");
-                String appointmentDate = rs.getString("appointmentDate");
-                String appointmentTime = rs.getString("appointmentTime");
+                AppointmentBean app = new AppointmentBean(
 
+                  rs.getInt("appointmentID"),
+                  rs.getString("userID"),
+                  rs.getString("doctorID"),
+                  rs.getString("appointmentDate"),
+                  rs.getString("appointmentTime"));
 
-                JsonObject appointmentDetails = new JsonObject();
-
-                appointmentDetails.addProperty("appointmentID", appointmentID);
-                appointmentDetails.addProperty("userID", userID);
-                appointmentDetails.addProperty("doctorID", doctorID);
-                appointmentDetails.addProperty("appointmentDate", appointmentDate);
-                appointmentDetails.addProperty("appointmentTime", appointmentTime);
-
-
-                output = appointmentDetails.toString();
+                appList.add(app);
 
             }
 
@@ -121,16 +119,16 @@ public class Appointment {
 
         } catch (Exception e) {
 
-            output = "An error occurred while reading the appointment details.";
+            System.out.println( "An error occurred while reading the appointment details.");
             System.err.println(e.getMessage());
 
         }
 
-        return output;
+        return appList;
 
     }
 
-    public String updateAppointment(String appointmentID, String userID, String doctorID, String appointmentDate, String appointmentTime) {
+    public String updateAppointment(AppointmentBean app) {
 
         String output = "";
 
@@ -150,11 +148,11 @@ public class Appointment {
             PreparedStatement appointmentDetails = con.prepareStatement(appointmentQuery);
 
             // Binding values to appointmentQuery
-            appointmentDetails.setString(1, userID);
-            appointmentDetails.setString(2, doctorID);
-            appointmentDetails.setString(3, appointmentDate);
-            appointmentDetails.setString(4, appointmentTime);
-            appointmentDetails.setInt(5, Integer.parseInt(appointmentID));
+            appointmentDetails.setString(1, app.getUserID());
+            appointmentDetails.setString(2, app.getDoctorID());
+            appointmentDetails.setString(3, app.getAppointmentDate());
+            appointmentDetails.setString(4, app.getAppointmentTime());
+            appointmentDetails.setInt(5, app.getId());
 
 
 
@@ -177,7 +175,7 @@ public class Appointment {
 
     }
 
-    public String deleteAppointment(String appointmentID) {
+    public String deleteAppointment(String ID) {
 
         String output = "";
 
@@ -199,7 +197,7 @@ public class Appointment {
 
 
             // Binding the values
-            preparedStmtForAppointment.setInt(1, Integer.parseInt(appointmentID));
+            preparedStmtForAppointment.setInt(1, Integer.parseInt(ID));
 
 
             // Executing the statements

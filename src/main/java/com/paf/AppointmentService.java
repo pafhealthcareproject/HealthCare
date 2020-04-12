@@ -2,6 +2,8 @@ package com.paf;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+
+import beans.AppointmentBean;
 import com.google.gson.*;
 import model.Appointment;
 import org.jsoup.*;
@@ -9,6 +11,8 @@ import org.jsoup.parser.*;
 import org.jsoup.nodes.*;
 
 import model.Appointment;
+
+import java.util.List;
 
 @Path("/Appointments")
 public class AppointmentService {
@@ -18,7 +22,7 @@ public class AppointmentService {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public String readAppointment() {
+    public List<AppointmentBean> readAppointment() {
 
         return appointmentObj.readAppointment();
 
@@ -30,15 +34,9 @@ public class AppointmentService {
     @Produces(MediaType.TEXT_PLAIN)
     public String insertAppointment(String appointmentData) {
 
-        JsonObject appointmentObject = new JsonParser().parse(appointmentData).getAsJsonObject();
+        AppointmentBean app = new AppointmentBean(appointmentData);
 
-        String userID = appointmentObject.get("userID").getAsString();
-        String doctorID = appointmentObject.get("doctorID").getAsString();
-        String appointmentDate = appointmentObject.get("appointmentDate").getAsString();
-        String appointmentTime = appointmentObject.get("appointmentTime").getAsString();
-
-
-        String output = appointmentObj.insertAppointment(userID, doctorID, appointmentDate, appointmentTime);
+        String output = appointmentObj.insertAppointment(app);
 
         return output;
 
@@ -50,16 +48,8 @@ public class AppointmentService {
     @Produces(MediaType.TEXT_PLAIN)
     public String updateAppointment(String appointmentData) {
 
-        JsonObject appointmentObject = new JsonParser().parse(appointmentData).getAsJsonObject();
-
-        String appointmentID = appointmentObject.get("appointmentID").getAsString();
-        String userID = appointmentObject.get("userID").getAsString();
-        String doctorID = appointmentObject.get("doctorID").getAsString();
-        String appointmentDate = appointmentObject.get("appointmentDate").getAsString();
-        String appointmentTime = appointmentObject.get("appointmentTime").getAsString();
-
-
-        String output = appointmentObj.updateAppointment(appointmentID, userID, doctorID, appointmentDate, appointmentTime);
+        AppointmentBean app = new AppointmentBean(appointmentData);
+        String output = appointmentObj.updateAppointment(app);
 
         return output;
 
