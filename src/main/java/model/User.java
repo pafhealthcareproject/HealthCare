@@ -48,7 +48,6 @@ public class User {
             String userQuery = "insert into user" + "(userID, firstName, lastName, age, gender, email, address, username, password)" + " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             String userPhoneQuery = "insert into userphone" + "(userID, userPhone)" + " values (?, ?)";
 
-
             PreparedStatement preparedStmtForUser = con.prepareStatement(userQuery);
             PreparedStatement preparedStmtForUserPhone = con.prepareStatement(userPhoneQuery);
 
@@ -62,7 +61,6 @@ public class User {
             preparedStmtForUser.setString(7,  usr.getAddress());
             preparedStmtForUser.setString(8,  usr.getUsername());
             preparedStmtForUser.setString(9,  usr.getPassword());
-
 
             // Binding values to userPhone Table
             preparedStmtForUserPhone.setInt(1, 0);

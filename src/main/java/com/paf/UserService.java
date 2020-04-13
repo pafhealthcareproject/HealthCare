@@ -32,7 +32,7 @@ public class UserService {
     public String insertUser(String userData) {
 
         UserBean usr = new UserBean(userData);
-        String output =	userObj.insertUser(usr);
+        String output = userObj.insertUser(usr);
 
         return output;
 
@@ -45,7 +45,7 @@ public class UserService {
     public String updateUser(String userData) {
 
         UserBean usr = new UserBean(userData);
-        String output =	userObj.updateUser(usr);
+        String output = userObj.updateUser(usr);
 
         return output;
 

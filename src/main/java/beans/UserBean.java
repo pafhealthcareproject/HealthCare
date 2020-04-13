@@ -8,6 +8,7 @@ import model.User;
 
 @XmlRootElement
 public class UserBean {
+
     int id;
     private String firstName;
     private String lastName;
@@ -148,4 +149,5 @@ public class UserBean {
     public void setUserphone(String userphone) {
         this.userphone = userphone;
     }
+
 }
