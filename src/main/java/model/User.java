@@ -1,8 +1,11 @@
 package model;
 
+import beans.UserBean;
 import com.google.gson.JsonObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
 
@@ -27,7 +30,7 @@ public class User {
 
     }
 
-    public String insertUser(String firstName, String lastName, String age, String gender, String email, String address, String username, String password, String userPhone) {
+    public String insertUser(UserBean usr){
 
         String output = "";
 
@@ -45,23 +48,25 @@ public class User {
             String userQuery = "insert into user" + "(userID, firstName, lastName, age, gender, email, address, username, password)" + " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             String userPhoneQuery = "insert into userphone" + "(userID, userPhone)" + " values (?, ?)";
 
+
             PreparedStatement preparedStmtForUser = con.prepareStatement(userQuery);
             PreparedStatement preparedStmtForUserPhone = con.prepareStatement(userPhoneQuery);
 
             // Binding values to user Table
             preparedStmtForUser.setInt(1, 0);
-            preparedStmtForUser.setString(2, firstName);
-            preparedStmtForUser.setString(3, lastName);
-            preparedStmtForUser.setInt(4, Integer.parseInt(age));
-            preparedStmtForUser.setString(5, gender);
-            preparedStmtForUser.setString(6, email);
-            preparedStmtForUser.setString(7, address);
-            preparedStmtForUser.setString(8, username);
-            preparedStmtForUser.setString(9, password);
+            preparedStmtForUser.setString(2, usr.getFirstName());
+            preparedStmtForUser.setString(3,  usr.getLastName());
+            preparedStmtForUser.setInt(4, Integer.parseInt(usr.getAge()));
+            preparedStmtForUser.setString(5,  usr.getGender());
+            preparedStmtForUser.setString(6,  usr.getEmail());
+            preparedStmtForUser.setString(7,  usr.getAddress());
+            preparedStmtForUser.setString(8,  usr.getUsername());
+            preparedStmtForUser.setString(9,  usr.getPassword());
+
 
             // Binding values to userPhone Table
             preparedStmtForUserPhone.setInt(1, 0);
-            preparedStmtForUserPhone.setString(2, userPhone);
+            preparedStmtForUserPhone.setString(2, usr.getUserphone());
 
             // Executing the statements
             preparedStmtForUser.execute();
@@ -82,7 +87,9 @@ public class User {
 
     }
 
-    public String readUser() {
+    public List<UserBean> readUser()  {
+
+        List<UserBean> usrList = new ArrayList<>();
 
         String output = "";
 
@@ -92,42 +99,33 @@ public class User {
 
             if (con == null) {
 
-                return "Database connection error occurred while reading the user details.";
-
+                System.out.println("Database connection error occurred while reading the user details.");
+                return usrList;
             }
 
-            String Query = "select u.userID, u.firstName, u.lastName, u.age, u.gender, u.email, u.address,u.username,u.password,p.userPhone from user u,userphone p where u.userID=p.userID";
+            String query = "select u.userID, u.firstName, u.lastName, u.age, u.gender, u.email, u.address,u.username,u.password,p.userPhone from user u,userphone p where u.userID=p.userID";
 
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(Query);
+            ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
 
-                String userID = Integer.toString(rs.getInt("userID"));
-                String firstName = rs.getString("firstName");
-                String lastName = rs.getString("lastName");
-                String age = Integer.toString(rs.getInt("age"));
-                String gender = rs.getString("gender");
-                String email = rs.getString("email");
-                String address = rs.getString("address");
-                String userPhone = rs.getString("userPhone");
-                String username = rs.getString("username");
-                String password = rs.getString("password");
+                UserBean usr = new UserBean(
 
-                JsonObject userDetails = new JsonObject();
+                        rs.getInt("userID"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("age"),
+                        rs.getString("gender"),
+                        rs.getString("email"),
+                        rs.getString("address"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("userPhone")
 
-                userDetails.addProperty("userID", userID);
-                userDetails.addProperty("firstName", firstName);
-                userDetails.addProperty("lastName", lastName);
-                userDetails.addProperty("age", age);
-                userDetails.addProperty("gender", gender);
-                userDetails.addProperty("email", email);
-                userDetails.addProperty("address", address);
-                userDetails.addProperty("userPhone", userPhone);
-                userDetails.addProperty("username", username);
-                userDetails.addProperty("password", password);
+                );
 
-                output = userDetails.toString();
+                usrList.add(usr);
 
             }
 
@@ -135,16 +133,16 @@ public class User {
 
         } catch (Exception e) {
 
-            output = "An error occurred while reading the user details.";
+            System.out.println("An error occurred while reading the user details.");
             System.err.println(e.getMessage());
 
         }
 
-        return output;
+        return usrList;
 
     }
 
-    public String updateUser(String userID, String firstName, String lastName, String age, String gender, String email, String address, String username, String password, String userPhone) {
+    public String updateUser(UserBean usr) {
 
         String output = "";
 
@@ -166,19 +164,19 @@ public class User {
             PreparedStatement userPhoneDetails = con.prepareStatement(userPhoneQuery);
 
             // Binding values to userQuery
-            userDetails.setString(1, firstName);
-            userDetails.setString(2, lastName);
-            userDetails.setInt(3, Integer.parseInt(age));
-            userDetails.setString(4, gender);
-            userDetails.setString(5, email);
-            userDetails.setString(6, address);
-            userDetails.setString(7, username);
-            userDetails.setString(8, password);
-            userDetails.setInt(9, Integer.parseInt(userID));
+            userDetails.setString(1, usr.getFirstName());
+            userDetails.setString(2, usr.getLastName());
+            userDetails.setString(3, usr.getAge());
+            userDetails.setString(4, usr.getGender());
+            userDetails.setString(5, usr.getEmail());
+            userDetails.setString(6, usr.getAddress());
+            userDetails.setString(7, usr.getUsername());
+            userDetails.setString(8, usr.getPassword());
+            userDetails.setInt(9, usr.getId());
 
             // Binding values to userPhoneQuery
-            userPhoneDetails.setString(1, userPhone);
-            userPhoneDetails.setInt(2, Integer.parseInt(userID));
+            userPhoneDetails.setString(1, usr.getUserphone());
+            userPhoneDetails.setInt(2, usr.getId());
 
             // Executing the statements
             userDetails.execute();
@@ -199,7 +197,7 @@ public class User {
 
     }
 
-    public String deleteUser(String userID) {
+    public String deleteUser(String ID) {
 
         String output = "";
 
@@ -217,12 +215,13 @@ public class User {
             String deleteUser = "delete from user where userID=?";
             String deleteUserPhone = "delete from userphone where userID=?";
 
+
             PreparedStatement preparedStmtForUser = con.prepareStatement(deleteUser);
             PreparedStatement preparedStmtForUserPhone = con.prepareStatement(deleteUserPhone);
 
             // Binding the values
-            preparedStmtForUser.setInt(1, Integer.parseInt(userID));
-            preparedStmtForUserPhone.setInt(1, Integer.parseInt(userID));
+            preparedStmtForUser.setInt(1, Integer.parseInt(ID));
+            preparedStmtForUserPhone.setInt(1, Integer.parseInt(ID));
 
             // Executing the statements
             preparedStmtForUser.execute();
