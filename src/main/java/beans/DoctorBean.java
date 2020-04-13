@@ -8,6 +8,7 @@ import model.Doctor;
 
 @XmlRootElement
 public class DoctorBean {
+
     int id;
     private String doctorName;
     private String specialization;

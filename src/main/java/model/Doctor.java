@@ -59,10 +59,8 @@ public class Doctor {
             preparedStmtForDoctor.setString(5, doc.getDoctorPassword());
             preparedStmtForDoctor.setInt(6, Integer.parseInt(doc.getAdminID()));
 
-
             // Executing the statements
             preparedStmtForDoctor.execute();
-
 
             con.close();
 

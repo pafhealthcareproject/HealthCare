@@ -24,7 +24,9 @@ public class DoctorService {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public List<DoctorBean> readDoctor() {
+
         return doctorObj.readDoctor();
+
     }
 
     @POST
