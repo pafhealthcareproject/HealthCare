@@ -2,6 +2,8 @@ package com.paf;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+
+import beans.DoctorBean;
 import com.google.gson.*;
 import model.Doctor;
 import org.jsoup.*;
@@ -10,18 +12,19 @@ import org.jsoup.nodes.*;
 
 import model.Doctor;
 
+import java.util.List;
+
+
 @Path("/Doctors")
 public class DoctorService {
 
-    Doctor doctorobj = new Doctor();
+    Doctor doctorObj = new Doctor();
 
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public String readDoctor() {
-
-        return doctorobj.readDoctor();
-
+    public List<DoctorBean> readDoctor() {
+        return doctorObj.readDoctor();
     }
 
     @POST
@@ -30,15 +33,8 @@ public class DoctorService {
     @Produces(MediaType.TEXT_PLAIN)
     public String insertDoctor(String doctorData) {
 
-        JsonObject doctorObject = new JsonParser().parse(doctorData).getAsJsonObject();
-
-        String doctorName = doctorObject.get("doctorName").getAsString();
-        String specialization = doctorObject.get("specialization").getAsString();
-        String doctorUsername = doctorObject.get("doctorUsername").getAsString();
-        String doctorPassword = doctorObject.get("doctorPassword").getAsString();
-        String adminID = doctorObject.get("adminID").getAsString();
-
-        String output = doctorobj.insertDoctor(doctorName, specialization, doctorUsername,doctorPassword, adminID);
+        DoctorBean doc = new DoctorBean(doctorData);
+        String output =	doctorObj.insertDoctor(doc);
 
         return output;
 
@@ -50,16 +46,8 @@ public class DoctorService {
     @Produces(MediaType.TEXT_PLAIN)
     public String updateDoctor(String doctorData) {
 
-        JsonObject doctorObject = new JsonParser().parse(doctorData).getAsJsonObject();
-
-        String doctorID = doctorObject.get("doctorID").getAsString();
-        String doctorName = doctorObject.get("doctorName").getAsString();
-        String specialization = doctorObject.get("specialization").getAsString();
-        String doctorUsername = doctorObject.get("doctorUsername").getAsString();
-        String doctorPassword = doctorObject.get("doctorPassword").getAsString();
-        String adminID = doctorObject.get("adminID").getAsString();
-
-        String output = doctorobj.updateDoctor(doctorID, doctorName, specialization, doctorUsername, doctorPassword, adminID);
+        DoctorBean doc = new DoctorBean(doctorData);
+        String output =	doctorObj.updateDoctor(doc);
 
         return output;
 
@@ -72,10 +60,9 @@ public class DoctorService {
     public String deleteDoctor(String doctorData) {
 
         JsonObject doctorObject = new JsonParser().parse(doctorData).getAsJsonObject();
-
         String doctorID = doctorObject.get("doctorID").getAsString();
 
-        String output = doctorobj.deleteDoctor(doctorID);
+        String output = doctorObj.deleteDoctor(doctorID);
 
         return output;
 
