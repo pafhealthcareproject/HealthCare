@@ -1,8 +1,11 @@
 package model;
 
+import beans.DoctorBean;
 import com.google.gson.JsonObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Doctor {
 
@@ -27,7 +30,9 @@ public class Doctor {
 
     }
 
-    public String insertDoctor(String doctorName,String specialization,String doctorUsername,String doctorPassword,String adminID) {
+    public String insertDoctor(DoctorBean doc) {
+
+        List<DoctorBean> docList = new ArrayList<>();
 
         String output = "";
 
@@ -48,16 +53,14 @@ public class Doctor {
 
             // Binding values to doctor Table
             preparedStmtForDoctor.setInt(1, 0);
-            preparedStmtForDoctor.setString(2, doctorName);
-            preparedStmtForDoctor.setString(3, specialization);
-            preparedStmtForDoctor.setString(4, doctorUsername);
-            preparedStmtForDoctor.setString(5, doctorPassword);
-            preparedStmtForDoctor.setString(6, adminID);
-
+            preparedStmtForDoctor.setString(2, doc.getDoctorName());
+            preparedStmtForDoctor.setString(3, doc.getSpecialization());
+            preparedStmtForDoctor.setString(4, doc.getDoctorUsername());
+            preparedStmtForDoctor.setString(5, doc.getDoctorPassword());
+            preparedStmtForDoctor.setInt(6, Integer.parseInt(doc.getAdminID()));
 
             // Executing the statements
             preparedStmtForDoctor.execute();
-
 
             con.close();
 
@@ -74,7 +77,9 @@ public class Doctor {
 
     }
 
-    public String readDoctor() {
+    public List<DoctorBean> readDoctor() {
+
+        List<DoctorBean> docList = new ArrayList<>();
 
         String output = "";
 
@@ -84,51 +89,46 @@ public class Doctor {
 
             if (con == null) {
 
-                return "Database connection error occurred while reading the doctor details.";
-
+                System.out.println("Database connection error occurred while reading the doctor details.");
+                return docList;
             }
 
-            String query = "select doctorID, doctorName, specialization, doctorUsername, doctorPassword, adminID from doctor" ;
+            String query = "select d.doctorID, d.doctorName, d.specialization, d.doctorUsername, d.doctorPassword, d.adminID from doctor d" ;
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
 
-                String doctorID = Integer.toString(rs.getInt("doctorID"));
-                String doctorName = rs.getString("doctorName");
-                String specialization = rs.getString("specialization");
-                String doctorUsername = rs.getString("doctorUsername");
-                String doctorPassword = rs.getString("doctorPassword");
-                String adminID = rs.getString("adminID");
+                DoctorBean doc = new DoctorBean(
 
-                JsonObject doctorDetails = new JsonObject();
 
-                doctorDetails.addProperty("doctorID", doctorID);
-                doctorDetails.addProperty("doctorName", doctorName);
-                doctorDetails.addProperty("specialization", specialization);
-                doctorDetails.addProperty("doctorUsername", doctorUsername);
-                doctorDetails.addProperty("doctorPassword", doctorPassword);
-                doctorDetails.addProperty("adminID", adminID);
+                       rs.getString("doctorName"),
+                       rs.getString("specialization"),
+                       rs.getString("doctorUsername"),
+                       rs.getString("doctorPassword"),
+                       rs.getString("adminID")
 
-                output = doctorDetails.toString();
+                       );
 
-            }
+                     docList.add(doc);
+
+                }
 
             con.close();
 
         } catch (Exception e) {
 
-            output = "An error occurred while reading the doctor details.";
-            System.err.println(e.getMessage());
+                System.out.println("An error occurred while reading the doctor details.");
+                System.err.println(e.getMessage());
 
         }
 
-        return output;
+        return docList;
 
     }
 
-    public String updateDoctor(String doctorID,String doctorName,String specialization,String doctorUsername,String doctorPassword,String adminID) {
+    public String updateDoctor(DoctorBean doc) {
 
         String output = "";
 
@@ -148,12 +148,12 @@ public class Doctor {
             PreparedStatement doctorDetails = con.prepareStatement(doctorQuery);
 
             // Binding values to doctorQuery
-            doctorDetails.setString(1, doctorName);
-            doctorDetails.setString(2, specialization);
-            doctorDetails.setString(3, doctorUsername);
-            doctorDetails.setString(4, doctorPassword);
-            doctorDetails.setString(5, adminID);
-            doctorDetails.setInt(6, Integer.parseInt(doctorID));
+            doctorDetails.setString(1, doc.getDoctorName());
+            doctorDetails.setString(2, doc.getSpecialization());
+            doctorDetails.setString(3, doc.getDoctorUsername());
+            doctorDetails.setString(4, doc.getDoctorPassword());
+            doctorDetails.setString(5, doc.getAdminID());
+            doctorDetails.setInt(6, doc.getId());
 
             // Executing the statements
             doctorDetails.execute();
@@ -173,7 +173,7 @@ public class Doctor {
 
     }
 
-    public String deleteDoctor(String doctorID) {
+    public String deleteDoctor(String ID) {
 
         String output = "";
 
@@ -193,7 +193,7 @@ public class Doctor {
             PreparedStatement preparedStmtForDoctor = con.prepareStatement(deleteDoctor);
 
             // Binding the values
-            preparedStmtForDoctor.setInt(1, Integer.parseInt(doctorID));
+            preparedStmtForDoctor.setInt(1, Integer.parseInt(ID));
 
             // Executing the statements
             preparedStmtForDoctor.execute();
