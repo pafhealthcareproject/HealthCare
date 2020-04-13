@@ -8,7 +8,6 @@ import model.User;
 
 @XmlRootElement
 public class UserBean {
-
     int id;
     private String firstName;
     private String lastName;
@@ -18,12 +17,13 @@ public class UserBean {
     private String address;
     private String username;
     private String password;
+    private String userphone;
 
     public UserBean() {}
 
-    public UserBean(String usr) {
+    public UserBean(String user) {
 
-        JsonObject userObject = new JsonParser().parse(usr).getAsJsonObject();
+        JsonObject userObject = new JsonParser().parse(user).getAsJsonObject();
 
         if (userObject.get("userID") !=null) {
             this.id = userObject.get("userID").getAsInt();
@@ -35,11 +35,12 @@ public class UserBean {
         this.email = userObject.get("email").getAsString();
         this.address = userObject.get("address").getAsString();
         this.username = userObject.get("username").getAsString();
-        this. password = userObject.get("password").getAsString();
+        this.password = userObject.get("password").getAsString();
+        this.userphone = userObject.get("userphone").getAsString();
 
     }
 
-    public UserBean(int id, String firstName, String lastName, String age, String gender, String email, String address, String username, String password) {
+    public UserBean(int id, String firstName, String lastName, String age, String gender, String email, String address, String username, String password, String userphone) {
 
         this.id = id;
         this.firstName = firstName;
@@ -50,10 +51,11 @@ public class UserBean {
         this.address = address;
         this.username = username;
         this.password = password;
+        this.userphone = userphone;
 
     }
 
-    public UserBean(String firstName, String lastName, String age, String gender, String email, String address, String username, String password){
+    public UserBean(String firstName, String lastName, String age, String gender, String email, String address, String username, String password,String userphone){
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,6 +65,8 @@ public class UserBean {
         this.address = address;
         this.username = username;
         this.password = password;
+        this.userphone = userphone;
+
     }
 
     public int getId() {
@@ -135,5 +139,13 @@ public class UserBean {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUserphone() {
+        return userphone;
+    }
+
+    public void setUserphone(String userphone) {
+        this.userphone = userphone;
     }
 }
