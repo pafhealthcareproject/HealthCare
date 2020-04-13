@@ -22,9 +22,9 @@ public class UserBean {
 
     public UserBean() {}
 
-    public UserBean(String user) {
+    public UserBean(String usr) {
 
-        JsonObject userObject = new JsonParser().parse(user).getAsJsonObject();
+        JsonObject userObject = new JsonParser().parse(usr).getAsJsonObject();
 
         if (userObject.get("userID") !=null) {
             this.id = userObject.get("userID").getAsInt();
