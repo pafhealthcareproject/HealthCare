@@ -4,12 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 import util.DBConnection;
 
 public class Authentication {
 
-    public static boolean auth(String username, String password) {
+    public static boolean isUserAllowed(final String username, final String password, final Set<String> rolesSet) {
+
+        boolean isAllowed = false;
+        String role = "" , user = "", pswd = "" ;
 
         try {
 
@@ -19,7 +23,7 @@ public class Authentication {
 
             }
 
-            // create a prepared statements
+            // creating prepared statements
             String queryUser = " SELECT * FROM user where username = '" + username + "' and password = '" + password + "' ";
             String queryHospital = " SELECT * FROM hospital where hospitalUsername = '" + username + "' and hospitalPassword = '" + password + "' ";
             String queryDoctor = " SELECT * FROM doctor where doctorUsername = '" + username + "' and doctorPassword = '" + password + "' ";
@@ -39,22 +43,25 @@ public class Authentication {
 
             if(rsUser.next()) {
 
-                con.close();
-                return true;
+                user = rsUser.getString("username");
+                pswd = rsUser.getString("password");
+                role= rsUser.getString("role");
 
             }
 
             if(rsHospital.next()) {
 
-                con.close();
-                return true;
+                user = rsHospital.getString("hospitalUsername");
+                pswd = rsHospital.getString("hospitalPassword");
+                role= rsHospital.getString("role");
 
             }
 
             if(rsDoctor.next()) {
 
-                con.close();
-                return true;
+                user = rsDoctor.getString("doctorUsername");
+                pswd = rsDoctor.getString("doctorPassword");
+                role= rsDoctor.getString("role");
 
             }
 
@@ -66,7 +73,19 @@ public class Authentication {
 
         }
 
-        return false;
+        System.out.println(user +" "+ pswd);
+
+        if(username.equals(user) && password.equals(pswd)) {
+
+            if(rolesSet.contains(role)) {
+
+                isAllowed = true;
+
+            }
+
+        }
+
+        return isAllowed;
 
     }
 
