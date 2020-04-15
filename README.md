@@ -1,4 +1,4 @@
-# Healthcare System (PAF Module Project)
+# Healthcare System API (PAF Module Project)
 
 <p align="center">
   <b><br>Built with ❤️ using Java - JAX-RS (Jersy) on Tomcat with MySQL<br><br></b>
