@@ -8,6 +8,7 @@ import model.Hospital;
 
 @XmlRootElement
 public class HospitalBean {
+
     int id;
     private String hospitalName;
     private String hospitalAddress;
