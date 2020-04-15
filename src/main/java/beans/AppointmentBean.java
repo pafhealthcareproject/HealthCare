@@ -15,6 +15,7 @@ public class AppointmentBean {
     private String appointmentDate;
     private String appointmentTime;
 
+
     public AppointmentBean() {}
 
     public AppointmentBean(String app) {
