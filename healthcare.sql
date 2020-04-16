@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Apr 12, 2020 at 08:23 AM
+-- Generation Time: Apr 15, 2020 at 05:25 PM
 -- Server version: 8.0.18
 -- PHP Version: 7.4.0
 
@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS `doctor` (
   `doctorUsername` varchar(200) NOT NULL,
   `doctorPassword` varchar(200) NOT NULL,
   `adminID` int(200) NOT NULL,
+  `role` varchar(200) NOT NULL DEFAULT 'doctor',
   PRIMARY KEY (`doctorID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -80,9 +81,9 @@ CREATE TABLE IF NOT EXISTS `doctor` (
 -- Dumping data for table `doctor`
 --
 
-INSERT INTO `doctor` (`doctorID`, `doctorName`, `specialization`, `doctorUsername`, `doctorPassword`, `adminID`) VALUES
-(1, 'SAG', 'dsg', 'dsgv', 'fad', 1),
-(2, 'sg', 'd', 'dzh', 'hd', 1);
+INSERT INTO `doctor` (`doctorID`, `doctorName`, `specialization`, `doctorUsername`, `doctorPassword`, `adminID`, `role`) VALUES
+(1, 'SAG', 'dsg', 'dsgv', 'fad', 1, 'doctor'),
+(2, 'sg', 'd', 'dzh', 'hd', 1, 'doctor');
 
 -- --------------------------------------------------------
 
@@ -98,7 +99,8 @@ CREATE TABLE IF NOT EXISTS `hospital` (
   `hospitalUsername` varchar(200) NOT NULL,
   `hospitalPassword` varchar(200) NOT NULL,
   `adminID` int(200) NOT NULL,
-  `appointmentCharge` varchar(200) NOT NULL,
+  `appointmentCharge` double NOT NULL,
+  `role` varchar(200) NOT NULL DEFAULT 'hospital',
   PRIMARY KEY (`hospitalID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -106,9 +108,9 @@ CREATE TABLE IF NOT EXISTS `hospital` (
 -- Dumping data for table `hospital`
 --
 
-INSERT INTO `hospital` (`hospitalID`, `hospitalName`, `hospitalAddress`, `hospitalUsername`, `hospitalPassword`, `adminID`, `appointmentCharge`) VALUES
-(1, 'Nawaloka', 'Nawaloka Hospital, Malabe', 'navalokamlb', 'malabe123', 0, ''),
-(2, 'gh', 'thht', 'hth', 'thh', 0, '');
+INSERT INTO `hospital` (`hospitalID`, `hospitalName`, `hospitalAddress`, `hospitalUsername`, `hospitalPassword`, `adminID`, `appointmentCharge`, `role`) VALUES
+(1, 'Nawaloka', 'Nawaloka Hospital, Malabe', 'navalokamlb', 'malabe123', 0, 0, 'hospital'),
+(2, 'gh', 'thht', 'hth', 'thh', 0, 0, 'hospital');
 
 -- --------------------------------------------------------
 
@@ -156,12 +158,24 @@ DROP TABLE IF EXISTS `payment`;
 CREATE TABLE IF NOT EXISTS `payment` (
   `paymentID` int(200) NOT NULL AUTO_INCREMENT,
   `appointmentID` varchar(200) NOT NULL,
-  `paymentAmount` varchar(200) NOT NULL,
-  `paymentDate` date NOT NULL,
-  `paymentTime` time(6) NOT NULL,
+  `paymentAmount` double NOT NULL,
+  `paymentDate` varchar(200) NOT NULL,
+  `paymentTime` varchar(200) NOT NULL,
   `paymentType` varchar(200) NOT NULL,
+  `cardNumber` varchar(200) NOT NULL,
+  `expires` varchar(200) NOT NULL,
+  `cvv` int(200) NOT NULL,
+  `onlinePaymentID` varchar(200) NOT NULL,
   PRIMARY KEY (`paymentID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`paymentID`, `appointmentID`, `paymentAmount`, `paymentDate`, `paymentTime`, `paymentType`, `cardNumber`, `expires`, `cvv`, `onlinePaymentID`) VALUES
+(1, '1', 222, '0000-00-00', '00:00:02.000000', 'CreditCard', '12', '2', 2, ''),
+(2, '1', 222, '213', '2', 'CreditCard', '12', '2', 2, '');
 
 -- --------------------------------------------------------
 
@@ -180,6 +194,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `address` varchar(200) NOT NULL,
   `username` varchar(200) NOT NULL,
   `password` varchar(200) NOT NULL,
+  `role` varchar(200) NOT NULL,
   PRIMARY KEY (`userID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -187,8 +202,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`userID`, `firstName`, `lastName`, `age`, `gender`, `email`, `address`, `username`, `password`) VALUES
-(1, 'pasan', 'perera', 18, 'Male', 'pasan@gmail.com', 'kurunegala Maspotha', 'pasan', 'Th333');
+INSERT INTO `user` (`userID`, `firstName`, `lastName`, `age`, `gender`, `email`, `address`, `username`, `password`, `role`) VALUES
+(1, 'pasan', 'perera', 18, 'Male', 'pasan@gmail.com', 'kurunegala Maspotha', 'pasan', 'Th333', '');
 
 -- --------------------------------------------------------
 

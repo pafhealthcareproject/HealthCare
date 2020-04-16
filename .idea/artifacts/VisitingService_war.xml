@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="VisitingService:war">
+    <output-path>$PROJECT_DIR$/VisitingService/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>VisitingService</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="VisitingService.war">
+      <element id="artifact" artifact-name="VisitingService:war exploded" />
+    </root>
+  </artifact>
+</component>

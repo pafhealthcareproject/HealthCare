@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="AppointmentService:war">
+    <output-path>$PROJECT_DIR$/AppointmentService/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>AppointmentService</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="AppointmentService.war">
+      <element id="artifact" artifact-name="AppointmentService:war exploded" />
+    </root>
+  </artifact>
+</component>
