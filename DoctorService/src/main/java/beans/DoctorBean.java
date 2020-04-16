@@ -16,16 +16,16 @@ public class DoctorBean {
     private String doctorPassword;
     private String adminID;
 
-
     public DoctorBean() {}
 
     public DoctorBean(String doc) {
 
         JsonObject doctorObject = new JsonParser().parse(doc).getAsJsonObject();
 
-        if (doctorObject.get("doctorID") !=null) {
+        if (doctorObject.get("doctorID") != null) {
             this.id = doctorObject.get("doctorID").getAsInt();
         }
+
         this.doctorName = doctorObject.get("doctorName").getAsString();
         this.specialization = doctorObject.get("specialization").getAsString();
         this.doctorUsername = doctorObject.get("doctorUsername").getAsString();
@@ -44,7 +44,6 @@ public class DoctorBean {
         this.doctorPassword = doctorPassword;
         this.adminID = adminID;
 
-
     }
 
     public DoctorBean(String doctorName, String specialization, String doctorUsername, String doctorPassword, String adminID){
@@ -54,7 +53,6 @@ public class DoctorBean {
         this.doctorUsername = doctorUsername;
         this.doctorPassword = doctorPassword;
         this.adminID = adminID;
-
 
     }
 
@@ -66,7 +64,6 @@ public class DoctorBean {
         this.id = id;
     }
 
-
     public String getDoctorName() {
         return doctorName;
     }
@@ -74,7 +71,6 @@ public class DoctorBean {
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
     }
-
 
     public String getSpecialization() {
         return specialization;
@@ -84,7 +80,6 @@ public class DoctorBean {
         this.specialization = specialization;
     }
 
-
     public String getDoctorUsername() {
         return doctorUsername;
     }
@@ -92,7 +87,6 @@ public class DoctorBean {
     public void setDoctorUsername(String doctorUsername) {
         this.doctorUsername = doctorUsername;
     }
-
 
     public String getDoctorPassword() {
         return doctorPassword;
@@ -102,7 +96,6 @@ public class DoctorBean {
         this.doctorPassword = doctorPassword;
     }
 
-
     public String getAdminID() {
         return adminID;
     }
@@ -110,7 +103,5 @@ public class DoctorBean {
     public void setAdminID(String adminID) {
         this.adminID = adminID;
     }
-
-
 
 }

@@ -1,43 +1,39 @@
 package com.paf;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-
 import beans.AppointmentBean;
-import com.google.gson.*;
-import model.Appointment;
-import org.jsoup.*;
-import org.jsoup.parser.*;
-import org.jsoup.nodes.*;
-
 import model.Appointment;
 
-import java.util.List;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
-@Path("/Appointments")
+@Path("/Appointment")
 public class AppointmentService {
 
     Appointment appointmentObj = new Appointment();
+    AppointmentBean appointmentbean ;
 
     @GET
     @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<AppointmentBean> readAppointment() {
+    @Produces(MediaType.TEXT_HTML)
+    public String readAppointment()
+    {
 
-        return appointmentObj.readAppointment();
+        String output = appointmentObj.readAppointment();
+        return output;
 
     }
+
 
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String insertAppointment(String appointmentData) {
+    public String insertAppointment(String appointmentData)
+    {
 
-        AppointmentBean app = new AppointmentBean(appointmentData);
-
-        String output = appointmentObj.insertAppointment(app);
-
+        appointmentbean =  new AppointmentBean();
+        appointmentbean.convertStringToJSONInsert(appointmentData);
+        String output = appointmentObj.insertAppointment(appointmentbean);
         return output;
 
     }
@@ -46,11 +42,12 @@ public class AppointmentService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String updateAppointment(String appointmentData) {
+    public String updateAppointment(String appointmentData)
+    {
 
-        AppointmentBean app = new AppointmentBean(appointmentData);
-        String output = appointmentObj.updateAppointment(app);
-
+        appointmentbean =  new AppointmentBean();
+        appointmentbean.convertStringToJSONUpdate(appointmentData);
+        String output = appointmentObj.updateAppointment(appointmentbean);
         return output;
 
     }
@@ -59,14 +56,12 @@ public class AppointmentService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String deleteAppointment(String appointmentData) {
+    public String deleteItem(String appointmentData)
+    {
 
-        JsonObject appointmentObject = new JsonParser().parse(appointmentData).getAsJsonObject();
-
-        String appointmentID = appointmentObject.get("appointmentID").getAsString();
-
-        String output = appointmentObj.deleteAppointment(appointmentID);
-
+        appointmentbean =  new AppointmentBean();
+        appointmentbean.convertStringToJSONDelete(appointmentData);
+        String output = appointmentObj.deleteAppointment(appointmentbean);
         return output;
 
     }

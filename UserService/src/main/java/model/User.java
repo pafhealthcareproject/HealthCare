@@ -1,51 +1,37 @@
 package model;
 
-import beans.UserBean;
-import com.google.gson.JsonObject;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+import beans.UserBean;
+import javax.ws.rs.core.Response.Status;
+import util.DBConnection;
+
 public class User {
 
-    private Connection connect() {
+    public Response insertUsers(UserBean usr) {
 
-        Connection con = null;
-
-        try {
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // DB Name, Username and Password
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3308/healthcare", "root", "");
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-
-        return con;
-
-    }
-
-    public String insertUser(UserBean usr){
-
-        String output = "";
+        Response response;
+        String output = "{\"Status\":\"Success\"}";
 
         try {
 
-            Connection con = connect();
+            Connection con = DBConnection.connect();
 
             if (con == null) {
 
-                return "Database connection error occurred while inserting the user details.";
+                output = "{\"Status\":\"Connection Failed\"}";
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(output).build();
 
             }
 
             // Creating prepared statements
-            String userQuery = "insert into user" + "(userID, firstName, lastName, age, gender, email, address, username, password)" + " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String userQuery = "insert into user" + "(userID, firstName, lastName, age, gender, email, address, username, password, role)" + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             String userPhoneQuery = "insert into userphone" + "(userID, userPhone)" + " values (?, ?)";
 
             PreparedStatement preparedStmtForUser = con.prepareStatement(userQuery);
@@ -61,6 +47,7 @@ public class User {
             preparedStmtForUser.setString(7,  usr.getAddress());
             preparedStmtForUser.setString(8,  usr.getUsername());
             preparedStmtForUser.setString(9,  usr.getPassword());
+            preparedStmtForUser.setString(10,  usr.getRole());
 
             // Binding values to userPhone Table
             preparedStmtForUserPhone.setInt(1, 0);
@@ -70,38 +57,68 @@ public class User {
             preparedStmtForUser.execute();
             preparedStmtForUserPhone.execute();
 
-            con.close();
+            output = "{\"Status\":\"Success\"}";
+            response = Response.status(Status.CREATED).entity(output).build();
 
-            output = "User details inserted successfully.";
+            con.close();
 
         } catch (Exception e) {
 
-            output = "An error occurred while inserting the user details.";
+            output = "{\"Status\":"+e.getMessage()+"}";
+            response=Response.status(Status.INTERNAL_SERVER_ERROR).entity(output).build();
             System.err.println(e.getMessage());
 
         }
 
-        return output;
+        return response;
 
     }
 
-    public List<UserBean> readUser()  {
+    public List<UserBean> readUsers() {
 
-        List<UserBean> usrList = new ArrayList<>();
+        return	readUsers(0);
 
-        String output = "";
+    }
+
+    public UserBean readUserById(int id) {
+
+        List<UserBean> list = readUsers(id);
+
+        if(!list.isEmpty()) {
+
+            return	list.get(0);
+
+        }
+
+        return null;
+
+    }
+    public List<UserBean> readUsers(int id) {
+
+        List<UserBean> userList = new ArrayList<>();
 
         try {
 
-            Connection con = connect();
+            Connection con = DBConnection.connect();
 
             if (con == null) {
 
-                System.out.println("Database connection error occurred while reading the user details.");
-                return usrList;
+                System.out.println("An error occurred while reading the user details.");
+                return userList;
+
             }
 
-            String query = "select u.userID, u.firstName, u.lastName, u.age, u.gender, u.email, u.address,u.username,u.password,p.userPhone from user u,userphone p where u.userID=p.userID";
+            String query;
+
+            if (id==0) {
+
+                query = "select * from user";
+
+            }else {
+
+                query = "select * from user where userID="+id;
+
+            }
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -119,11 +136,12 @@ public class User {
                         rs.getString("address"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("userPhone")
+                        rs.getString("userPhone"),
+                        rs.getString("role")
 
                 );
 
-                usrList.add(usr);
+                userList.add(usr);
 
             }
 
@@ -136,26 +154,28 @@ public class User {
 
         }
 
-        return usrList;
+        return userList;
 
     }
 
-    public String updateUser(UserBean usr) {
+    public Response updateUser(UserBean usr) {
 
         String output = "";
+        Response response;
 
         try {
 
-            Connection con = connect();
+            Connection con = DBConnection.connect();
 
             if (con == null) {
 
-                return "Database connection error occurred while updating the user details.";
+                output = "{\"status\":\"Connection Failed\"}";
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(output).build();
 
             }
 
             // Creating prepared statements
-            String userQuery = "UPDATE user SET" + " firstName=?," + "lastName=?," + "age=?," + "gender=?," + "email=?," + "address=?," + "username=?," + "password=?" + "WHERE userID=?";
+            String userQuery = "UPDATE user SET" + " firstName=?," + "lastName=?," + "age=?," + "gender=?," + "email=?," + "address=?," + "username=?," + "password=?," + "role=?" + "WHERE userID=?";
             String userPhoneQuery = "UPDATE userphone SET" + " userPhone=?" + "WHERE userID=?";
 
             PreparedStatement userDetails = con.prepareStatement(userQuery);
@@ -171,6 +191,7 @@ public class User {
             userDetails.setString(7, usr.getUsername());
             userDetails.setString(8, usr.getPassword());
             userDetails.setInt(9, usr.getId());
+            userDetails.setString(10, usr.getRole());
 
             // Binding values to userPhoneQuery
             userPhoneDetails.setString(1, usr.getUserphone());
@@ -181,31 +202,34 @@ public class User {
             userPhoneDetails.execute();
 
             con.close();
-
-            output = "User details updated successfully.";
+            output = "{\"Status\":\"Success\"}";
+            response = Response.status(Status.ACCEPTED).entity(output).build();
 
         } catch (Exception e) {
 
-            output = "An error occurred while updating the user details.";
+            output = "{\"Status\":"+e.getMessage()+"}";
+            response = Response.status(Status.INTERNAL_SERVER_ERROR).entity(output).build();
             System.err.println(e.getMessage());
 
         }
 
-        return output;
+        return response;
 
     }
 
-    public String deleteUser(String ID) {
+    public Response deleteUser(int ID) {
 
         String output = "";
+        Response response;
 
         try {
 
-            Connection con = connect();
+            Connection con = DBConnection.connect();
 
             if (con == null) {
 
-                return "Database connection error occurred while deleting the user details.";
+                output = "{\"Status\":\"Connection Failed\"}";
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(output).build();
 
             }
 
@@ -213,30 +237,30 @@ public class User {
             String deleteUser = "delete from user where userID=?";
             String deleteUserPhone = "delete from userphone where userID=?";
 
-
             PreparedStatement preparedStmtForUser = con.prepareStatement(deleteUser);
             PreparedStatement preparedStmtForUserPhone = con.prepareStatement(deleteUserPhone);
 
             // Binding the values
-            preparedStmtForUser.setInt(1, Integer.parseInt(ID));
-            preparedStmtForUserPhone.setInt(1, Integer.parseInt(ID));
+            preparedStmtForUser.setInt(1, ID);
+            preparedStmtForUserPhone.setInt(1, ID);
 
             // Executing the statements
             preparedStmtForUser.execute();
             preparedStmtForUserPhone.execute();
 
             con.close();
-
-            output = "User details deleted successfully.";
+            output = "{\"Status\":\"Success\"}";
+            response = Response.status(Status.ACCEPTED).entity(output).build();
 
         } catch (Exception e) {
 
-            output = "An error occurred while deleting the user details.";
+            output = "{\"Status\":"+e.getMessage()+"}";
+            response=Response.status(Status.INTERNAL_SERVER_ERROR).entity(output).build();
             System.err.println(e.getMessage());
 
         }
 
-        return output;
+        return response;
 
     }
 

@@ -19,6 +19,7 @@ public class UserBean {
     private String username;
     private String password;
     private String userphone;
+    private String role;
 
     public UserBean() {}
 
@@ -38,10 +39,11 @@ public class UserBean {
         this.username = userObject.get("username").getAsString();
         this.password = userObject.get("password").getAsString();
         this.userphone = userObject.get("userphone").getAsString();
+        this.role = userObject.get("role").getAsString();
 
     }
 
-    public UserBean(int id, String firstName, String lastName, String age, String gender, String email, String address, String username, String password, String userphone) {
+    public UserBean(int id, String firstName, String lastName, String age, String gender, String email, String address, String username, String password, String userphone, String role) {
 
         this.id = id;
         this.firstName = firstName;
@@ -53,10 +55,11 @@ public class UserBean {
         this.username = username;
         this.password = password;
         this.userphone = userphone;
+        this.role = role;
 
     }
 
-    public UserBean(String firstName, String lastName, String age, String gender, String email, String address, String username, String password,String userphone){
+    public UserBean(String firstName, String lastName, String age, String gender, String email, String address, String username, String password,String userphone, String role){
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -67,6 +70,7 @@ public class UserBean {
         this.username = username;
         this.password = password;
         this.userphone = userphone;
+        this.role = role;
 
     }
 
@@ -148,6 +152,14 @@ public class UserBean {
 
     public void setUserphone(String userphone) {
         this.userphone = userphone;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }
