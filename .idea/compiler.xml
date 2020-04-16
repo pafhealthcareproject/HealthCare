@@ -8,9 +8,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="UserService" />
         <module name="DoctorService" />
-        <module name="HospitalService" />
-        <module name="AppointmentService" />
         <module name="VisitingService" />
+        <module name="AppointmentService" />
+        <module name="HospitalService" />
         <module name="PaymentService" />
       </profile>
     </annotationProcessing>
