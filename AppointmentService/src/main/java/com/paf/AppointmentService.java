@@ -3,6 +3,7 @@ package com.paf;
 import beans.AppointmentBean;
 import model.Appointment;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -12,6 +13,7 @@ public class AppointmentService {
     Appointment appointmentObj = new Appointment();
     AppointmentBean appointmentbean ;
 
+    @RolesAllowed({"admin","user"})
     @GET
     @Path("/")
     @Produces(MediaType.TEXT_HTML)
@@ -23,7 +25,7 @@ public class AppointmentService {
 
     }
 
-
+    @RolesAllowed({"admin","user"})
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -38,6 +40,7 @@ public class AppointmentService {
 
     }
 
+    @RolesAllowed({ "admin","user" })
     @PUT
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -52,6 +55,7 @@ public class AppointmentService {
 
     }
 
+    @RolesAllowed({ "admin","patient" })
     @DELETE
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)

@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import model.Doctor;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -16,51 +17,49 @@ public class DoctorService {
 
     Doctor objDoctor = new Doctor();
 
+    @RolesAllowed({ "doctor", "admin","user"})
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public List<DoctorBean> viewDoctor() {
-
-        return objDoctor.viewDoctors();
-
+        return objDoctor.viewDoctor();
     }
 
+    @RolesAllowed({ "doctor", "admin","user" })
     @GET
-    @Path("/{d_ID}")
+    @Path("/{doctorID}")
     // @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public DoctorBean viewDoctorById(@PathParam("d_ID") int id) {
-
+    public DoctorBean viewDoctorById(@PathParam("doctorID") int id) {
         return objDoctor.viewDoctorById(id);
-
     }
 
+    @RolesAllowed("admin")
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String insertDoctor(String PatientData) {
+    public String insertDoctor(DoctorBean doc) {
 
-        DoctorBean doctor = new DoctorBean(PatientData);
-
-        String output = objDoctor.insertDoctor(doctor);
+        String output = objDoctor.insertDoctor(doc);
         return output;
 
     }
 
+    @RolesAllowed({ "doctor", "admin"})
     @PUT
-    @Path("/")
+    @Path("/{doctorID}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String updateDoctor(String Doctor) {
+    public String updateDoctor(DoctorBean doctor, @PathParam("doctorID") int id) {
 
-        DoctorBean doc = new DoctorBean(Doctor);
-
-        String output = objDoctor.updateDoctor(doc);
+        doctor.setId(id);
+        String output = objDoctor.updateDoctor(doctor);
         return output;
 
     }
 
+    @RolesAllowed({ "doctor", "admin"})
     @DELETE
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -69,7 +68,7 @@ public class DoctorService {
 
         JsonObject DoctorObject = new JsonParser().parse(doctor).getAsJsonObject();
 
-        String doctorID = DoctorObject.get("d_ID").getAsString();
+        String doctorID = DoctorObject.get("doctorID").getAsString();
         String output = objDoctor.removeDoctor(doctorID);
 
         return output;

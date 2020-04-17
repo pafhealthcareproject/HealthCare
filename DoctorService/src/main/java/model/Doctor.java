@@ -1,8 +1,13 @@
 package model;
 
 import beans.DoctorBean;
+import com.google.gson.JsonObject;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import util.DBConnection;
 
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -42,13 +47,26 @@ public class Doctor {
             // Executing the statements
             preparedStmtForDoctor.execute();
 
+            JsonObject msg = new JsonObject();
+            msg.addProperty("id", keyGen());
+            msg.addProperty("username", doc.getDoctorUsername());
+            msg.addProperty("password", doc.getDoctorPassword());
+            msg.addProperty("role", "doctor");
+
+            HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("admin", "admin");
+            Client client = ClientBuilder.newBuilder().register(feature).build();
+            WebTarget webTarget = client.target("http://localhost:8080/UserService/UserService").path("users");
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.post(Entity.entity(msg.toString(), MediaType.APPLICATION_JSON));
+
+
             con.close();
-            output = "Inserted successfully";
+            output = "Successfully Inserted a Doctor to the System";
             System.out.println(output);
 
         } catch (Exception e) {
 
-            output = "Error while inserting the patient.";
+            output = "Error while inserting a doctor.";
             System.err.println(e.getMessage());
 
         }
@@ -57,19 +75,19 @@ public class Doctor {
 
     }
 
-    public List<DoctorBean> viewDoctors() {
+    public List<DoctorBean> viewDoctor() {
 
-        return viewDoctors(0);
+        return	viewDoctor(0);
 
     }
 
     public DoctorBean viewDoctorById(int id) {
 
-        List<DoctorBean> list = viewDoctors(id);
+        List<DoctorBean> list =viewDoctor(id);
 
         if(!list.isEmpty()) {
 
-            return list.get(0);
+            return	list.get(0);
 
         }
 
@@ -77,48 +95,37 @@ public class Doctor {
 
     }
 
-    public List<DoctorBean> viewDoctors(int id) {
-
+    public List<DoctorBean> viewDoctor(int id) {
         List <DoctorBean> doctorList = new ArrayList<>();
 
-        try {
-
+        try
+        {
             Connection con = DBConnection.connect();
-
             if (con == null) {
 
-                System.out.println("Error while reading from database");
+                System.out.println("Error While reading from database");
                 return doctorList;
-
             }
 
             String query;
 
             if(id==0) {
-
                 query = "select * from doctor";
-
             }
             else {
-
                 query = "select * from doctor where doctorID="+id;
-
             }
-
             Statement stmt = con.createStatement();
             ResultSet results = stmt.executeQuery(query);
 
             while (results.next()) {
-
                 DoctorBean doc = new DoctorBean(
-
 
                         results.getString("doctorName"),
                         results.getString("specialization"),
                         results.getString("doctorUsername"),
                         results.getString("doctorPassword"),
                         results.getString("adminID")
-
 
                 );
 
@@ -145,7 +152,6 @@ public class Doctor {
         String output = "";
 
         try {
-
             Connection con = DBConnection.connect();
 
             if (con == null) {
@@ -171,11 +177,12 @@ public class Doctor {
             doctorDetails.execute();
 
             con.close();
-            output = "Updated successfully";
+            output = "Successfully Updated the Doctor";
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 
-            output = "Error occurred while updating the Doctor.";
+            output = "Error while updating the Doctor.";
             System.err.println(e.getMessage());
 
         }
@@ -193,9 +200,7 @@ public class Doctor {
             Connection con = DBConnection.connect();
 
             if (con == null) {
-
                 return "Error while connecting to the database for deleting.";
-
             }
 
             // Prepared Statement
@@ -203,10 +208,8 @@ public class Doctor {
 
             PreparedStatement preparedStmt = con.prepareStatement(query);
 
-
-            // Binding value
+            // Binding values
             preparedStmt.setInt(1, Integer.parseInt(doctorID));
-
 
             // execute the statement
             preparedStmt.execute();
@@ -223,6 +226,15 @@ public class Doctor {
         }
 
         return output;
+    }
+
+    public int keyGen() {
+
+        List<DoctorBean> list ;
+        list = viewDoctor();
+        int num = list.size()+10;
+
+        return num;
 
     }
 

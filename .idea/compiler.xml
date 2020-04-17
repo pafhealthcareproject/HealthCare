@@ -6,10 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="UserService" />
         <module name="DoctorService" />
-        <module name="VisitingService" />
         <module name="AppointmentService" />
+        <module name="VisitingService" />
+        <module name="UserService" />
         <module name="HospitalService" />
         <module name="PaymentService" />
       </profile>
@@ -20,7 +20,7 @@
       <module name="HospitalService" target="8" />
       <module name="PaymentService" target="8" />
       <module name="UserService" target="8" />
-      <module name="VisitingService" target="1.7" />
+      <module name="VisitingService" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

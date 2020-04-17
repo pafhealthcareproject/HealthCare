@@ -42,6 +42,14 @@
           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.6.1" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.6" />
           <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.8.1" />
+          <element id="library" level="project" name="Maven: org.glassfish.jersey.media:jersey-media-json-jackson:2.13" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.3.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.3.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.3.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.3.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.3.2" />
+          <element id="library" level="project" name="Maven: org.json:json:20180813" />
         </element>
       </element>
       <element id="directory" name="META-INF">

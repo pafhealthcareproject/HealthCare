@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import model.Hospital;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -14,6 +15,7 @@ public class HospitalService {
 
     Hospital hospitalObj = new Hospital();
 
+    @RolesAllowed("admin")
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)

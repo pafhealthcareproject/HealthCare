@@ -162,7 +162,7 @@ public class Appointment {
 
             RequestBody body = RequestBody.create( "{ 'appointmentID':'"+finalAppointmentID+"','PaymentType':'"+appointment.getPaymentType()+"','amount':'"+appointment.getAmount()+"'}", JSONType);
 
-            Request request = new Request.Builder().url("http://localhost:8080/HealthCare/api/payment/insertPaymentFromAppointment").post(body).build();
+            Request request = new Request.Builder().url("http://localhost:8080/AppointmentService/api/payment/insertPaymentFromAppointment").post(body).build();
 
             try (Response response = client.newCall(request).execute()) {
 
@@ -240,7 +240,7 @@ public class Appointment {
             OkHttpClient client = new OkHttpClient();
 
             RequestBody body = RequestBody.create( "{ 'appointmentID':'"+appointment.getAppointmentID()+"','PaymentType':'"+appointment.getPaymentType()+"','amount':'"+appointment.getAmount()+"'}", JSONType);
-            Request request = new Request.Builder().url("http://localhost:8080/HealthCare/api/payment/updatePaymentFromAppointment").put(body).build();
+            Request request = new Request.Builder().url("http://localhost:8080/AppointmentService/api/payment/updatePaymentFromAppointment").put(body).build();
 
             try (Response response = client.newCall(request).execute()) {
 
@@ -307,7 +307,7 @@ public class Appointment {
             MediaType JSONType = MediaType.get("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
             RequestBody body = RequestBody.create( "{ 'appointmentID':'"+appointment.getAppointmentID()+"'}",JSONType);
-            Request request = new Request.Builder().url("http://localhost:8080/HealthCare/api/payment/deletePaymentFromAppointment").delete(body).build();
+            Request request = new Request.Builder().url("http://localhost:8080/AppointmentService/api/payment/deletePaymentFromAppointment").delete(body).build();
 
             try (Response response = client.newCall(request).execute()) {
 
