@@ -1,7 +1,6 @@
 package model;
 
 import beans.HospitalBean;
-import com.google.gson.JsonObject;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -85,6 +84,25 @@ public class Hospital {
 
     public List<HospitalBean> readHospital()  {
 
+        return	readHospital(0);
+
+    }
+
+    public HospitalBean readHospitalById(int id)
+    {
+        List<HospitalBean> list = readHospital(id);
+
+        if(!list.isEmpty()) {
+
+            return	list.get(0);
+
+        }
+
+        return null;
+    }
+
+    public List<HospitalBean> readHospital(int hospitalID) {
+
         List<HospitalBean> hospList = new ArrayList<>();
 
         String output = "";
@@ -97,6 +115,7 @@ public class Hospital {
 
                 System.out.println("Database connection error occurred while reading the hospital details.");
                 return hospList;
+
             }
 
             String query = "select h.hospitalID, h.hospitalName, h.hospitalAddress, h.hospitalUsername, h.hospitalPassword, h.appointmentCharge, h.adminID, p.hospitalPhone\n" + "from hospital h, hospitalphone p\n" + "where h.hospitalID=p.hospitalID;";

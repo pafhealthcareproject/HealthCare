@@ -1,10 +1,9 @@
 package beans;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import model.User;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class UserBean {
@@ -19,7 +18,7 @@ public class UserBean {
     private String username;
     private String password;
     private String userphone;
-    private String role;
+    String role = "user";
 
     public UserBean() {}
 
@@ -152,14 +151,6 @@ public class UserBean {
 
     public void setUserphone(String userphone) {
         this.userphone = userphone;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
 }
