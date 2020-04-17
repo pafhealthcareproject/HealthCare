@@ -1,16 +1,16 @@
 package model;
 
+import beans.UserBean;
+import util.DBConnection;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.ws.rs.core.Response;
-import beans.UserBean;
-import javax.ws.rs.core.Response.Status;
-import util.DBConnection;
 
 public class User {
 
@@ -86,7 +86,7 @@ public class User {
 
         if(!list.isEmpty()) {
 
-            return	list.get(0);
+            return list.get(0);
 
         }
 

@@ -1,31 +1,37 @@
 package com.paf;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-
 import beans.DoctorBean;
-import com.google.gson.*;
-import model.Doctor;
-import org.jsoup.*;
-import org.jsoup.parser.*;
-import org.jsoup.nodes.*;
-
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import model.Doctor;
 
+import javax.annotation.security.PermitAll;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-
 @Path("/Doctors")
+@PermitAll
 public class DoctorService {
 
-    Doctor doctorObj = new Doctor();
+    Doctor objDoctor = new Doctor();
 
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<DoctorBean> readDoctor() {
+    public List<DoctorBean> viewDoctor() {
 
-        return doctorObj.readDoctor();
+        return objDoctor.viewDoctors();
+
+    }
+
+    @GET
+    @Path("/{d_ID}")
+    // @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public DoctorBean viewDoctorById(@PathParam("d_ID") int id) {
+
+        return objDoctor.viewDoctorById(id);
 
     }
 
@@ -33,11 +39,11 @@ public class DoctorService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String insertDoctor(String doctorData) {
+    public String insertDoctor(String PatientData) {
 
-        DoctorBean doc = new DoctorBean(doctorData);
-        String output =	doctorObj.insertDoctor(doc);
+        DoctorBean doctor = new DoctorBean(PatientData);
 
+        String output = objDoctor.insertDoctor(doctor);
         return output;
 
     }
@@ -46,11 +52,11 @@ public class DoctorService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String updateDoctor(String doctorData) {
+    public String updateDoctor(String Doctor) {
 
-        DoctorBean doc = new DoctorBean(doctorData);
-        String output =	doctorObj.updateDoctor(doc);
+        DoctorBean doc = new DoctorBean(Doctor);
 
+        String output = objDoctor.updateDoctor(doc);
         return output;
 
     }
@@ -59,12 +65,12 @@ public class DoctorService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String deleteDoctor(String doctorData) {
+    public String removeDoctor(String doctor) {
 
-        JsonObject doctorObject = new JsonParser().parse(doctorData).getAsJsonObject();
-        String doctorID = doctorObject.get("doctorID").getAsString();
+        JsonObject DoctorObject = new JsonParser().parse(doctor).getAsJsonObject();
 
-        String output = doctorObj.deleteDoctor(doctorID);
+        String doctorID = DoctorObject.get("d_ID").getAsString();
+        String output = objDoctor.removeDoctor(doctorID);
 
         return output;
 

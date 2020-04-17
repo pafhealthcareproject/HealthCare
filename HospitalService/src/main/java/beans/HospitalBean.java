@@ -1,10 +1,9 @@
 package beans;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import model.Hospital;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class HospitalBean {
@@ -25,8 +24,11 @@ public class HospitalBean {
         JsonObject hospitalObject = new JsonParser().parse(hosp).getAsJsonObject();
 
         if (hospitalObject.get("hospitalID") !=null) {
+
             this.id = hospitalObject.get("hospitalID").getAsInt();
+
         }
+
         this.hospitalName = hospitalObject.get("hospitalName").getAsString();
         this.hospitalAddress = hospitalObject.get("hospitalAddress").getAsString();
         this.hospitalUsername = hospitalObject.get("hospitalUsername").getAsString();

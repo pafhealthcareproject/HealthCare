@@ -1,16 +1,12 @@
 package com.paf;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-
 import beans.HospitalBean;
-import com.google.gson.*;
-import org.jsoup.*;
-import org.jsoup.parser.*;
-import org.jsoup.nodes.*;
-
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import model.Hospital;
 
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/Hospitals")
@@ -32,7 +28,7 @@ public class HospitalService {
     public String insertHospital(String hospitalData) {
 
         HospitalBean hosp = new HospitalBean(hospitalData);
-        String output =	hospitalObj.insertHospital(hosp);
+        String output = hospitalObj.insertHospital(hosp);
 
         return output;
 
@@ -45,7 +41,7 @@ public class HospitalService {
     public String updateHospital(String hospitalData) {
 
         HospitalBean hosp = new HospitalBean(hospitalData);
-        String output =	hospitalObj.updateHospital(hosp);
+        String output = hospitalObj.updateHospital(hosp);
 
         return output;
 

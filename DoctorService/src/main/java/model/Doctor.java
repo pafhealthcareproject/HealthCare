@@ -1,48 +1,28 @@
 package model;
 
 import beans.DoctorBean;
-import com.google.gson.JsonObject;
+import util.DBConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Doctor {
 
-    private Connection connect() {
-
-        Connection con = null;
-
-        try {
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // DB Name, Username and Password
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3308/healthcare", "root", "");
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-
-        return con;
-
-    }
-
     public String insertDoctor(DoctorBean doc) {
-
-        List<DoctorBean> docList = new ArrayList<>();
 
         String output = "";
 
         try {
 
-            Connection con = connect();
+            Connection con = DBConnection.connect();
 
             if (con == null) {
 
-                return "Database connection error occurred while inserting the doctor details.";
+                return "Error while connecting to the database for inserting.";
 
             }
 
@@ -63,12 +43,12 @@ public class Doctor {
             preparedStmtForDoctor.execute();
 
             con.close();
-
-            output = "Doctor details inserted successfully.";
+            output = "Inserted successfully";
+            System.out.println(output);
 
         } catch (Exception e) {
 
-            output = "An error occurred while inserting the Doctor details.";
+            output = "Error while inserting the patient.";
             System.err.println(e.getMessage());
 
         }
@@ -77,54 +57,86 @@ public class Doctor {
 
     }
 
-    public List<DoctorBean> readDoctor() {
+    public List<DoctorBean> viewDoctors() {
 
-        List<DoctorBean> docList = new ArrayList<>();
+        return viewDoctors(0);
 
-        String output = "";
+    }
+
+    public DoctorBean viewDoctorById(int id) {
+
+        List<DoctorBean> list = viewDoctors(id);
+
+        if(!list.isEmpty()) {
+
+            return list.get(0);
+
+        }
+
+        return null;
+
+    }
+
+    public List<DoctorBean> viewDoctors(int id) {
+
+        List <DoctorBean> doctorList = new ArrayList<>();
 
         try {
 
-            Connection con = connect();
+            Connection con = DBConnection.connect();
 
             if (con == null) {
 
-                System.out.println("Database connection error occurred while reading the doctor details.");
-                return docList;
+                System.out.println("Error while reading from database");
+                return doctorList;
+
             }
 
-            String query = "select d.doctorID, d.doctorName, d.specialization, d.doctorUsername, d.doctorPassword, d.adminID from doctor d" ;
+            String query;
+
+            if(id==0) {
+
+                query = "select * from doctor";
+
+            }
+            else {
+
+                query = "select * from doctor where doctorID="+id;
+
+            }
 
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet results = stmt.executeQuery(query);
 
-            while (rs.next()) {
+            while (results.next()) {
 
                 DoctorBean doc = new DoctorBean(
 
 
-                       rs.getString("doctorName"),
-                       rs.getString("specialization"),
-                       rs.getString("doctorUsername"),
-                       rs.getString("doctorPassword"),
-                       rs.getString("adminID")
+                        results.getString("doctorName"),
+                        results.getString("specialization"),
+                        results.getString("doctorUsername"),
+                        results.getString("doctorPassword"),
+                        results.getString("adminID")
 
-                       );
 
-                     docList.add(doc);
+                );
 
-                }
+                doctorList.add(doc);
+
+            }
 
             con.close();
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 
-                System.out.println("An error occurred while reading the doctor details.");
-                System.err.println(e.getMessage());
+            System.out.println("Error While Reading");
+            System.err.println(e.getMessage());
 
         }
 
-        return docList;
+        return doctorList;
 
     }
 
@@ -134,11 +146,11 @@ public class Doctor {
 
         try {
 
-            Connection con = connect();
+            Connection con = DBConnection.connect();
 
             if (con == null) {
 
-                return "Database connection error occurred while updating the doctor details.";
+                return "Error while connecting to the database for updating.";
 
             }
 
@@ -159,12 +171,11 @@ public class Doctor {
             doctorDetails.execute();
 
             con.close();
-
-            output = "Doctor details updated successfully.";
+            output = "Updated successfully";
 
         } catch (Exception e) {
 
-            output = "An error occurred while updating the doctor details.";
+            output = "Error occurred while updating the Doctor.";
             System.err.println(e.getMessage());
 
         }
@@ -173,38 +184,40 @@ public class Doctor {
 
     }
 
-    public String deleteDoctor(String ID) {
+    public String removeDoctor(String doctorID) {
 
         String output = "";
 
         try {
 
-            Connection con = connect();
+            Connection con = DBConnection.connect();
 
             if (con == null) {
 
-                return "Database connection error occurred while deleting the doctor details.";
+                return "Error while connecting to the database for deleting.";
 
             }
 
-            // Creating the prepared statements
-            String deleteDoctor = "delete from doctor where doctorID=?";
+            // Prepared Statement
+            String query = "delete from doctor where doctorID=?";
 
-            PreparedStatement preparedStmtForDoctor = con.prepareStatement(deleteDoctor);
+            PreparedStatement preparedStmt = con.prepareStatement(query);
 
-            // Binding the values
-            preparedStmtForDoctor.setInt(1, Integer.parseInt(ID));
 
-            // Executing the statements
-            preparedStmtForDoctor.execute();
+            // Binding value
+            preparedStmt.setInt(1, Integer.parseInt(doctorID));
+
+
+            // execute the statement
+            preparedStmt.execute();
 
             con.close();
+            output = "Deleted successfully";
 
-            output = "Doctor details deleted successfully.";
+        }
+        catch (Exception e) {
 
-        } catch (Exception e) {
-
-            output = "An error occurred while deleting the doctor details.";
+            output = "Error while deleting the Doctor.";
             System.err.println(e.getMessage());
 
         }

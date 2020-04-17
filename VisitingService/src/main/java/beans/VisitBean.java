@@ -2,7 +2,6 @@ package beans;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import model.Visit;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -40,7 +39,6 @@ public class VisitBean {
 
     public VisitBean(String hospitalID, String doctorID, String visitTime) {
 
-        this.id = id;
         this.hospitalID = hospitalID;
         this.doctorID = doctorID;
         this.visitTime = visitTime;

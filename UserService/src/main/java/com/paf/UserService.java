@@ -1,45 +1,29 @@
 package com.paf;
 
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.security.DenyAll;
-import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
 import beans.UserBean;
 import model.User;
-import model.Authentication;
+
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/users")
 public class UserService {
 
-    User userObj = new User();
+    User usrObj = new User();
 
     @RolesAllowed({"admin"})
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response readUsers() {
-
         List <UserBean> list;
         Response response;
 
-        list = userObj.readUsers();
-        response=Response.ok(userObj.readUsers()).build();
+        list = usrObj.readUsers();
+        response=Response.ok(usrObj.readUsers()).build();
 
         if (!list.isEmpty()) {
 
@@ -53,19 +37,19 @@ public class UserService {
 
     @RolesAllowed("admin")
     @GET
-    @Path("/{userId}")
+    @Path("/{userID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response readUserById(@PathParam("userId") int id) {
+    public Response readUserById(@PathParam("userID") int id) {
 
-        UserBean user = userObj.readUserById(id);
+        UserBean user = usrObj.readUserById(id);
 
         if (user !=null) {
 
-            return	Response.ok().entity(userObj.readUserById(id)).build();
+            return Response.ok().entity(usrObj.readUserById(id)).build();
 
         }
 
-        return	Response.noContent().build();
+        return Response.noContent().build();
 
     }
 
@@ -76,7 +60,7 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response insertUsers(UserBean user) {
 
-        Response response =	userObj.insertUsers(user);
+        Response response = usrObj.insertUsers(user);
         return response;
 
     }
@@ -89,7 +73,7 @@ public class UserService {
     public Response updateUser(@PathParam("userId") int userId,UserBean user) {
 
         user.setId(userId);
-        return userObj.updateUser(user);
+        return usrObj.updateUser(user);
 
     }
 
@@ -99,11 +83,11 @@ public class UserService {
     @Produces(MediaType.TEXT_PLAIN)
     public Response deleteUser(@PathParam("userId") int userId) {
 
-        return userObj.deleteUser(userId);
+        return usrObj.deleteUser(userId);
 
     }
 
-    @RolesAllowed({"doctor"})
+    @RolesAllowed({"doctor","admin"})
     @GET
     @Path("/doctor")
     @Produces(MediaType.APPLICATION_JSON)
@@ -123,21 +107,11 @@ public class UserService {
 
     }
 
-    @RolesAllowed({"user"})
+    @RolesAllowed({"user","admin"})
     @GET
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean checkPatient() {
-
-        return true;
-
-    }
-
-    @DenyAll
-    @GET
-    @Path("/deny")
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean deny() {
+    public boolean checkUser() {
 
         return true;
 
