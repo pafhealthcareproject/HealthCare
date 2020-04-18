@@ -1,79 +1,145 @@
 package com.paf;
 
-import java.sql.SQLException;
+import beans.BankPayment;
+import beans.CreditCard;
+import beans.Payment;
+
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import beans.Payment;
-import beans.CreditCard;
-import beans.Response;
-import beans.BankPayment;
-import model.PaymentModel;
-
-import util.DBConnection;
-
-
-@Path("Payments")
 public class PaymentService {
 
-    private PaymentModel paymentModel;
+    private Connection sqlConnection;
 
-    public PaymentService() throws ClassNotFoundException, SQLException {
-
-        this.paymentModel = new PaymentModel(DBConnection.connect());
-
+    public PaymentService(Connection sqlConnection) {
+        this.sqlConnection = sqlConnection;
     }
 
-    @GET
-    @Path("viewPayments")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Payment> view() throws SQLException {
+    //select payment method
+    public boolean makePayment(Payment payment) throws SQLException {
 
-        return this.paymentModel.getAllPayments();
+        if (payment.getClass().getCanonicalName() == CreditCard.class.getCanonicalName()) {
+            return makeCreditCardPayment((CreditCard) payment);
 
-    }
+        } else if (payment.getClass().getCanonicalName() == BankPayment.class.getCanonicalName()) {
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("online")
-    public Response makePayment(BankPayment payment) {
+            return makeBankPayment((BankPayment) payment);
 
-        try {
+        } else {
 
-            this.paymentModel.makePayment(payment);
-            return Response.OK("Payment Successfully Completed");
-
-        } catch (Exception e) {
-
-            return Response.Error(e);
+            return false;
 
         }
 
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("card")
-    public Response makePayment(CreditCard payment) {
+    private void assignParameters(PreparedStatement statement, Payment payment) throws SQLException {
 
-        try {
+        statement.setInt(1, payment.getAppointmentID());
+        statement.setDouble(2, payment.getPaymentAmount());
+        statement.setDate(3, new Date(new java.util.Date().getTime()));
 
-            this.paymentModel.makePayment(payment);
-            return Response.OK("Payment Successfully Completed");
+    }
 
-        } catch (Exception e) {
+    private boolean makeCreditCardPayment(CreditCard payment) throws SQLException {
 
-            return Response.Error(e);
+        String sql = "INSERT INTO payment(" +
+                "appointmentID, " +
+                "paymentAmount, " +
+                "paymentDate, " +
+                "paymentTime, " +
+                "paymentType, " +
+                "cardNumber, " +
+                "expires, " +
+                "cvv) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement statement = this.sqlConnection.prepareStatement(sql);
+
+        this.assignParameters(statement, payment);
+
+        statement.setString(6, payment.getCardNumber());
+        statement.setString(7, payment.getExpires());
+        statement.setInt(8, payment.getCvv());
+        statement.setString(5, PaymentMethod.CreditCard.name());
+
+        return statement.execute();
+
+    }
+
+    private boolean makeBankPayment(BankPayment payment) throws SQLException {
+
+        String sql = "INSERT INTO payment(" +
+                "appointmentID, " +
+                "paymentAmount, " +
+                "paymentDate, " +
+                "paymentTime, " +
+                "paymentType, " +
+                "onlinePaymentID" +
+                ") VALUES (?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement statement = this.sqlConnection.prepareStatement(sql);
+
+        this.assignParameters(statement, payment);
+
+        statement.setString(6, payment.getOnlinePaymentID());
+        statement.setString(5, PaymentMethod.BankPayment.name());
+
+        return statement.execute();
+
+    }
+
+    public List<Payment> getAllPayments() throws SQLException {
+        String sql = "SELECT 'paymentID', " +
+                "'appointmentID', " +
+                "'paymentAmount', " +
+                "'paymentDate', " +
+                "'paymentTime', " +
+                "'paymentType', " +
+                "'cardNumber', " +
+                "'expires', " +
+                "'cvv', " +
+                "'onlinePaymentID' " +
+                "FROM payment";
+        ResultSet resultSet = this.sqlConnection.prepareStatement(sql).executeQuery();
+        List<Payment> payments = new ArrayList<>();
+
+        while (resultSet.next()) {
+
+            String type = resultSet.getString(14);
+
+            if(type.equals(PaymentMethod.CreditCard.name())) {
+
+                payments.add( new CreditCard(
+
+                        resultSet.getDouble(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getInt(2),
+                        resultSet.getString(7),
+                        resultSet.getString(8),
+                        resultSet.getInt(9)
+
+                ));
+
+            } else if(type.equals(PaymentMethod.BankPayment.name())) {
+
+                payments.add( new BankPayment(
+
+                        resultSet.getDouble(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getInt(2),
+                        resultSet.getString(10)
+
+                ));
+
+            }
 
         }
+
+        return payments;
 
     }
 

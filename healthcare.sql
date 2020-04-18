@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Apr 17, 2020 at 07:52 AM
+-- Generation Time: Apr 18, 2020 at 03:24 PM
 -- Server version: 8.0.18
 -- PHP Version: 7.4.0
 
@@ -50,6 +50,8 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `appointmentDate` varchar(200) NOT NULL,
   `appointmentTime` varchar(200) NOT NULL,
   `tokenNo` int(200) NOT NULL,
+  `payType` varchar(200) NOT NULL,
+  `amount` double NOT NULL,
   PRIMARY KEY (`appointmentID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
@@ -57,8 +59,8 @@ CREATE TABLE IF NOT EXISTS `appointment` (
 -- Dumping data for table `appointment`
 --
 
-INSERT INTO `appointment` (`appointmentID`, `userID`, `doctorID`, `appointmentDate`, `appointmentTime`, `tokenNo`) VALUES
-(1, '1', '2', '0000-00-00', '00:00:03.000000', 0);
+INSERT INTO `appointment` (`appointmentID`, `userID`, `doctorID`, `appointmentDate`, `appointmentTime`, `tokenNo`, `payType`, `amount`) VALUES
+(1, '1', '2', '0000-00-00', '00:00:03.000000', 0, '', 0);
 
 -- --------------------------------------------------------
 

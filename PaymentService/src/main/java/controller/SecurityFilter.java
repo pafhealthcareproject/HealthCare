@@ -1,4 +1,4 @@
-package com.paf;
+package controller;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
