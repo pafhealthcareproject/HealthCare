@@ -6,6 +6,7 @@
     <file url="file://$PROJECT_DIR$/HospitalService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PaymentService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/UserService" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/UserService" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/VisitingService" charset="UTF-8" />
   </component>
 </project>
