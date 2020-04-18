@@ -220,7 +220,7 @@ public class Doctor {
         }
         catch (Exception e) {
 
-            output = "Error while deleting the Doctor.";
+            output = "An error occurred while deleting the Doctor.";
             System.err.println(e.getMessage());
 
         }
