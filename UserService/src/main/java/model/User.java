@@ -225,7 +225,7 @@ public class User {
 
             if (con == null) {
 
-                return "Error while connecting to the database for deleting.";
+                return "Error while connecting to the database when deleting.";
 
             }
 
